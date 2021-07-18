@@ -1,5 +1,10 @@
 import { ContractData, Contract } from "@balena/jellyfish-types/build/core";
 
+export interface ConstructorOptions {
+	contract: Contract;
+	contractData: ContractData;
+}
+
 export interface ActorCredentials {
 	slug: string;
 	sessionToken: string;
