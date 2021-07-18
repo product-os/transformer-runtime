@@ -1,6 +1,7 @@
 import { ConstructorOptions, TaskContract } from "./types";
 import fs from 'fs'
 import { directory } from "./utils/helpers";
+import { prepareWorkspace, processBackflow, pullTransformer, pushOutput, runTransformer, validateOutput } from "./lib/transformer";
 export default class TransformerRunner {
 
   options: ConstructorOptions;
