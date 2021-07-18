@@ -2,6 +2,10 @@ import { ConstructorOptions, TaskContract } from "./types";
 import fs from 'fs'
 import { directory } from "./utils/helpers";
 import { prepareWorkspace, processBackflow, pullTransformer, pushOutput, runTransformer, validateOutput } from "./lib/transformer";
+import registry from "./lib/registry";
+import env from "./utils/env";
+import path from "path";
+import { ContainerCreateOptions } from "dockerode";
 export default class TransformerRunner {
 
   options: ConstructorOptions;
@@ -38,6 +42,56 @@ export default class TransformerRunner {
     await this.cleanupWorkspace(task);
 
     console.log(`[WORKER] Task ${task.slug} completed successfully`);
+  }
+
+  async runTransformer(task: TaskContract, transformerImageRef: string) {
+    console.log(`[WORKER] Running transformer image ${transformerImageRef}`);
+  
+    const docker = registry.docker;
+  
+    // docker-in-docker work by mounting a tmpfs for the inner volumes
+    const tmpDockerVolume = `tmp-docker-${task.id}`;
+  
+    //HACK - dockerode closes the stream unconditionally
+    process.stdout.end = () => { }
+    process.stderr.end = () => { }
+  
+    const runResult = await docker.run(
+      transformerImageRef,
+      [],
+      [process.stdout, process.stderr],
+      {
+        Tty: false,
+        Env: [
+          `INPUT=/input/${env.inputManifestFilename}`,
+          `OUTPUT=/output/${env.outputManifestFilename}`,
+        ],
+        Volumes: {
+          '/input/': {},
+          '/output/': {},
+          '/var/lib/docker': {} // if the transformers uses docker-in-docker, this is required
+        },
+        HostConfig: {
+          Init: true, // should ensure that containers never leave zombie processes
+          Privileged: this.options.privileged, //TODO: this should at least only happen for Transformers that need it
+          Binds: [
+            `${path.resolve(directory.input(task))}:/input/:ro`,
+            `${path.resolve(directory.output(task))}:/output/`,
+            `${tmpDockerVolume}:/var/lib/docker`,
+          ],
+        },
+      } as ContainerCreateOptions,
+    );
+  
+    const output = runResult[0];
+    const container = runResult[1];
+  
+    await docker.getContainer(container.id).remove({force: true})
+    await docker.getVolume(tmpDockerVolume).remove({force: true})
+  
+    console.log("[WORKER] run result", JSON.stringify(runResult));
+  
+    return output.StatusCode;
   }
 
   async validateTask(task: TaskContract) {
