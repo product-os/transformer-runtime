@@ -1,0 +1,24 @@
+{
+  "name": "transformer-runner-package",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/product-os/transformer-runner-package.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/product-os/transformer-runner-package/issues"
+  },
+  "homepage": "https://github.com/product-os/transformer-runner-package#readme",
+  "devDependencies": {
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}
