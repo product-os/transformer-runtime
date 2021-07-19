@@ -1,17 +1,18 @@
-import { ConstructorOptions, TaskContract } from "./types";
+import { ConstructorOptions, OutputManifest, TaskContract } from "./types";
 import fs from 'fs'
 import { directory } from "./utils/helpers";
-import { prepareWorkspace, processBackflow, pullTransformer, pushOutput, runTransformer, validateOutput } from "./lib/transformer";
-import registry from "./lib/registry";
+import Registry from "./lib/registry";
 import env from "./utils/env";
 import path from "path";
 import { ContainerCreateOptions } from "dockerode";
 export default class TransformerRunner {
 
   options: ConstructorOptions;
+  registry: Registry
 
   constructor(options: ConstructorOptions) {
     this.options = options;
+    this.registry = new Registry(options.registryHost, options.registryPort);
   }
 
   async cleanupWorkspace(task: TaskContract) {
@@ -19,52 +20,29 @@ export default class TransformerRunner {
     await fs.promises.rmdir(directory.output(task), { recursive: true });
   }
 
-  async runTask(task: TaskContract) {
-    console.log(`[WORKER] Running task ${task.slug}`);
+  // TODO: Remove task contract abstraction, use contract
+  async runTransformer(): Promise<OutputManifest> {
+    console.log(`[WORKER] Running transformer image ${this.options.imageRef}`);
 
-    await this.validateTask(task);
+    const docker = this.registry.docker;
 
-    // The actor is the loop, and to start with that will always be product-os
-    const actorCredentials = await jf.getActorCredentials(task.data.actor);
-
-    await prepareWorkspace(task, actorCredentials);
-
-    const transformerImageRef = await pullTransformer(task, actorCredentials);
-
-    const transformerExitCode = await runTransformer(task, transformerImageRef);
-
-    const outputManifest = await validateOutput(task, transformerExitCode);
-
-    await pushOutput(task, outputManifest, actorCredentials);
-
-    await processBackflow(task, outputManifest);
-
-    await this.cleanupWorkspace(task);
-
-    console.log(`[WORKER] Task ${task.slug} completed successfully`);
-  }
-
-  async runTransformer(task: TaskContract, transformerImageRef: string) {
-    console.log(`[WORKER] Running transformer image ${transformerImageRef}`);
-  
-    const docker = registry.docker;
-  
     // docker-in-docker work by mounting a tmpfs for the inner volumes
-    const tmpDockerVolume = `tmp-docker-${task.id}`;
-  
+    const tmpDockerVolume = `tmp-docker-${this.options.inputContract.id}`;
+
     //HACK - dockerode closes the stream unconditionally
     process.stdout.end = () => { }
     process.stderr.end = () => { }
-  
+
     const runResult = await docker.run(
-      transformerImageRef,
+      this.options.imageRef,
       [],
       [process.stdout, process.stderr],
       {
         Tty: false,
         Env: [
-          `INPUT=/input/${env.inputManifestFilename}`,
-          `OUTPUT=/output/${env.outputManifestFilename}`,
+          // `INPUT=/input/${env.inputManifestFilename}`,
+          `INPUT=${this.options.inputDirectory}/input.json`,
+          `OUTPUT=${this.options.outputDirectory}/output.json`,
         ],
         Volumes: {
           '/input/': {},
@@ -75,46 +53,85 @@ export default class TransformerRunner {
           Init: true, // should ensure that containers never leave zombie processes
           Privileged: this.options.privileged, //TODO: this should at least only happen for Transformers that need it
           Binds: [
-            `${path.resolve(directory.input(task))}:/input/:ro`,
-            `${path.resolve(directory.output(task))}:/output/`,
+            `${path.resolve(directory.input(this.options.inputContract))}:/input/:ro`,
+            `${path.resolve(directory.output(this.options.inputContract))}:/output/`,
             `${tmpDockerVolume}:/var/lib/docker`,
           ],
         },
       } as ContainerCreateOptions,
     );
-  
+
     const output = runResult[0];
     const container = runResult[1];
-  
+
     await docker.getContainer(container.id).remove({force: true})
     await docker.getVolume(tmpDockerVolume).remove({force: true})
-  
+
     console.log("[WORKER] run result", JSON.stringify(runResult));
-  
-    return output.StatusCode;
+
+    return await this.validateOutput(this.options.inputContract, output.StatusCode);
   }
 
-  async validateTask(task: TaskContract) {
-    // this could be simplified with e.g. https://github.com/PicnicSupermarket/aegis
-    const message = 'Task validation error: ';
-    if (!task?.id || task?.id === '') {
-      throw new Error(`${message} missing id`);
+  async validateOutput(task: TaskContract, transformerExitCode: number) {
+    console.log(`[WORKER] Validating transformer output`);
+
+    if (transformerExitCode !== 0) {
+      throw new Error(
+        `Transformer ${task.data.transformer.id} exited with non-zero status code: ${transformerExitCode}`,
+      );
     }
 
-    if (!task?.data) {
-      throw new Error(`${message} missing data property`);
+    const outputDir = directory.output(task);
+
+    let outputManifest;
+    try {
+      outputManifest = JSON.parse(
+        await fs.promises.readFile(
+          path.join(outputDir, env.outputManifestFilename),
+          'utf8',
+        ),
+      ) as OutputManifest;
+    } catch (e) {
+      e.message = `Could not load output manifest: ${e.message}`;
+      throw e;
     }
 
-    if (!task?.data?.actor || task?.id === '') {
-      throw new Error(`${message} missing actor property`);
+    await this.validateOutputManifest(outputManifest, outputDir);
+
+    return outputManifest;
+  }
+
+  async  validateOutputManifest(
+    m: OutputManifest,
+    outputDir: string,
+  ) {
+    const message = 'Output manifest validation error: ';
+    if (!Array.isArray(m.results)) {
+      throw new Error(`${message} missing results array`);
     }
 
-    if (!task?.data?.input) {
-      throw new Error(`${message} missing input contract`);
+    if (m.results.length < 1) {
+      console.log(`[WORKER] INFO: empty results array`);
     }
 
-    if (!task?.data?.transformer) {
-      throw new Error(`${message} missing transformer`);
+    for (const result of m.results) {
+      if (!result.contract || !result.contract.data) {
+        throw new Error(`${message} missing result contract`);
+      }
+
+      // Note: artifactPath can be empty
+      if (result.artifactPath) {
+        try {
+          await fs.promises.access(
+            path.join(outputDir, result.artifactPath),
+            fs.constants.R_OK,
+          );
+        } catch (e) {
+          throw new Error(
+            `${message} artifact path ${result.artifactPath} is not readable`,
+          );
+        }
+      }
     }
   }
 }
