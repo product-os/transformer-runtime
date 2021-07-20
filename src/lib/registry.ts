@@ -22,60 +22,6 @@ export default class Registry {
 		this.docker = new Docker();
 	}
 
-	public async pullImage(
-		imageReference: string,
-		authOpts: RegistryAuthOptions,
-	) {
-		const imageRef = imageReference;
-		console.log(`[WORKER] Pulling image ${imageRef}`);
-		const authconfig = this.getDockerAuthConfig(authOpts);
-		const progressStream = await this.docker.pull(imageRef, { authconfig });
-		await this.followDockerProgress(progressStream);
-		return imageRef;
-	}
-
-	public async pushImage(imageReference: string, imagePath: string, authOpts: RegistryAuthOptions) {
-		console.log(`[WORKER] Pushing image ${imageReference}`);
-		let image = await this.loadImage(imagePath);
-		const { registry, repo, tag } = /^(?<registry>[^/]+)\/(?<repo>.*):(?<tag>[^:]+)$/.exec(imageReference)?.groups!
-		await image.tag({ repo: `${registry}/${repo}`, tag: tag, force: true });
-		const taggedImage = await this.docker.getImage(imageReference);
-		const authconfig = this.getDockerAuthConfig(authOpts);
-		const pushOpts = { registry: registry, authconfig };
-		console.log("pushing image", taggedImage);
-		const progressStream = await taggedImage.push(pushOpts);
-		await this.followDockerProgress(progressStream);
-	}
-
-	private getDockerAuthConfig(authOpts: RegistryAuthOptions) {
-		return {
-			username: authOpts.username,
-			password: authOpts.password,
-			serveraddress: this.registryUrl,
-		}
-	}
-
-	private async followDockerProgress(progressStream: NodeJS.ReadableStream) {
-		return new Promise((resolve, reject) =>
-			this.docker.modem.followProgress(
-				progressStream,
-				(err: Error) => err ? reject(err) : resolve(null),
-				(line: any) => {
-					if (line.progress || line.progressDetail) {
-
-						// Progress bar's just spam the logs
-						return;
-					}
-					console.log("DOCKER", line);
-					if (line.error) {
-
-						// For some reason not all errors appear in the error callback above
-						reject(line);
-					}
-				})
-		);
-	}
-
 
 	public async pullArtifact(artifactReference: string, destDir: string, opts: RegistryAuthOptions) {
 		console.log(`[WORKER] Pulling artifact ${artifactReference}`);

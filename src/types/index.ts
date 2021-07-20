@@ -10,6 +10,7 @@ export interface ConstructorOptions {
 	imageRef: string;
 	registryHost: string;
 	registryPort: string;
+	decryptionKey: string;
 }
 
 export interface ActorCredentials {

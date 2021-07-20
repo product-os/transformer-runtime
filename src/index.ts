@@ -1,6 +1,6 @@
-import { ConstructorOptions, OutputManifest, TaskContract } from "./types";
+import { ConstructorOptions, InputManifest, OutputManifest, TaskContract } from "./types";
 import fs from 'fs'
-import { directory } from "./utils/helpers";
+import { decryptSecrets, directory } from "./utils/helpers";
 import Registry from "./lib/registry";
 import env from "./utils/env";
 import path from "path";
@@ -22,6 +22,24 @@ export default class TransformerRunner {
 
   // TODO: Remove task contract abstraction, use contract
   async runTransformer(): Promise<OutputManifest> {
+
+    // Add input manifest
+    const inputManifest: InputManifest = {
+      input: {
+        contract: this.options.inputContract,
+        transformerContract: this.options.transformerContract,
+        artifactPath: env.artifactDirectoryName,
+        decryptedSecrets: decryptSecrets(this.options.decryptionKey, this.options.inputContract.data.input.data.$transformer?.encryptedSecrets),
+        decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  this.options.inputContract.data.transformer.data.encryptedSecrets),
+      },
+    };
+  
+    await fs.promises.writeFile(
+      path.join(directory.input(this.options.inputContract), env.inputManifestFilename),
+      JSON.stringify(inputManifest, null, 4),
+      'utf8',
+    );
+
     console.log(`[WORKER] Running transformer image ${this.options.imageRef}`);
 
     const docker = this.registry.docker;
