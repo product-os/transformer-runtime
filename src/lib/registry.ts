@@ -1,5 +1,5 @@
-import * as Docker from 'dockerode';
-import * as spawn from '@ahmadnassri/spawn-promise';
+import Docker from 'dockerode';
+import * spawn from '@ahmadnassri/spawn-promise';
 import * as fs from 'fs';
 import { streamToPromise } from '../utils/helpers';
 
