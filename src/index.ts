@@ -33,6 +33,17 @@ export default class TransformerRunner {
       'utf8',
     );
 
+    // Make sure output directory exists
+    try {
+      await (await fs.promises.stat(this.options.outputDirectory)).isDirectory()
+    } catch (e) {
+      if (e.code !== 'ENOENT') {
+        throw e;
+      } else {
+        await fs.promises.mkdir(this.options.outputDirectory);
+      }
+    }
+
     console.log(`[WORKER] Running transformer image ${this.options.transformerImageRef}`);
 
     const docker = this.docker;
@@ -51,7 +62,6 @@ export default class TransformerRunner {
       {
         Tty: false,
         Env: [
-          // `INPUT=/input/${env.inputManifestFilename}`,
           `INPUT=${this.options.inputDirectory}/input.json`,
           `OUTPUT=${this.options.outputDirectory}/output.json`,
         ],
@@ -71,6 +81,8 @@ export default class TransformerRunner {
         },
       } as ContainerCreateOptions,
     );
+
+    console.log(3)
 
     const output = runResult[0];
     const container = runResult[1];
