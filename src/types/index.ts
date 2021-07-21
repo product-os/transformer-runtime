@@ -5,7 +5,7 @@ export interface ConstructorOptions {
 	privileged: boolean;
 	inputDirectory: string;
 	outputDirectory: string;
-	inputContract: TaskContract;
+	inputContract: ArtifactContract;
 	transformerContract: TransformerContract;
 	imageRef: string;
 	registryHost: string;

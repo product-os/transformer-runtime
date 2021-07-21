@@ -24,8 +24,8 @@ export default class TransformerRunner {
         contract: this.options.inputContract,
         transformerContract: this.options.transformerContract,
         artifactPath: env.artifactDirectoryName,
-        decryptedSecrets: decryptSecrets(this.options.decryptionKey, this.options.inputContract.data.input.data.$transformer?.encryptedSecrets),
-        decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  this.options.inputContract.data.transformer.data.encryptedSecrets),
+        decryptedSecrets: decryptSecrets(this.options.decryptionKey, this.options.inputContract.data.$transformer?.encryptedSecrets),
+        decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  this.options.transformerContract.data.encryptedSecrets),
       },
     };
 
@@ -82,15 +82,15 @@ export default class TransformerRunner {
 
     console.log("[WORKER] run result", JSON.stringify(runResult));
 
-    return await this.validateOutput(this.options.inputContract, output.StatusCode);
+    return await this.validateOutput(output.StatusCode);
   }
 
-  async validateOutput(task: TaskContract, transformerExitCode: number) {
+  async validateOutput(transformerExitCode: number) {
     console.log(`[WORKER] Validating transformer output`);
 
     if (transformerExitCode !== 0) {
       throw new Error(
-        `Transformer ${task.data.transformer.id} exited with non-zero status code: ${transformerExitCode}`,
+        `Transformer exited with non-zero status code: ${transformerExitCode}`,
       );
     }
 
