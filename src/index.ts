@@ -14,7 +14,6 @@ export default class TransformerRunner {
     this.docker = new Dockerode()
   }
 
-  // TODO: Remove task contract abstraction, use contract
   async runTransformer(): Promise<OutputManifest> {
 
     // Add input manifest
@@ -63,7 +62,7 @@ export default class TransformerRunner {
         },
         HostConfig: {
           Init: true, // should ensure that containers never leave zombie processes
-          Privileged: this.options.privileged, //TODO: this should at least only happen for Transformers that need it
+          Privileged: this.options.privileged,
           Binds: [
             `${path.resolve(this.options.inputDirectory)}:/input/:ro`,
             `${path.resolve(this.options.outputDirectory)}:/output/`,
