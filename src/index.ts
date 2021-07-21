@@ -1,6 +1,6 @@
 import { ConstructorOptions, InputManifest, OutputManifest, TaskContract } from "./types";
 import fs from 'fs'
-import { decryptSecrets, directory } from "./utils/helpers";
+import { decryptSecrets } from "./utils/helpers";
 import Registry from "./lib/registry";
 import env from "./utils/env";
 import path from "path";
@@ -13,11 +13,6 @@ export default class TransformerRunner {
   constructor(options: ConstructorOptions) {
     this.options = options;
     this.registry = new Registry(options.registryHost, options.registryPort);
-  }
-
-  async cleanupWorkspace(task: TaskContract) {
-    await fs.promises.rmdir(directory.input(task), { recursive: true });
-    await fs.promises.rmdir(directory.output(task), { recursive: true });
   }
 
   // TODO: Remove task contract abstraction, use contract
@@ -33,9 +28,9 @@ export default class TransformerRunner {
         decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  this.options.inputContract.data.transformer.data.encryptedSecrets),
       },
     };
-  
+
     await fs.promises.writeFile(
-      path.join(directory.input(this.options.inputContract), env.inputManifestFilename),
+      path.join(this.options.inputDirectory, env.inputManifestFilename),
       JSON.stringify(inputManifest, null, 4),
       'utf8',
     );
@@ -71,8 +66,8 @@ export default class TransformerRunner {
           Init: true, // should ensure that containers never leave zombie processes
           Privileged: this.options.privileged, //TODO: this should at least only happen for Transformers that need it
           Binds: [
-            `${path.resolve(directory.input(this.options.inputContract))}:/input/:ro`,
-            `${path.resolve(directory.output(this.options.inputContract))}:/output/`,
+            `${path.resolve(this.options.inputDirectory)}:/input/:ro`,
+            `${path.resolve(this.options.outputDirectory)}:/output/`,
             `${tmpDockerVolume}:/var/lib/docker`,
           ],
         },
@@ -99,13 +94,11 @@ export default class TransformerRunner {
       );
     }
 
-    const outputDir = directory.output(task);
-
     let outputManifest;
     try {
       outputManifest = JSON.parse(
         await fs.promises.readFile(
-          path.join(outputDir, env.outputManifestFilename),
+          path.join(this.options.outputDirectory, env.outputManifestFilename),
           'utf8',
         ),
       ) as OutputManifest;
@@ -114,7 +107,7 @@ export default class TransformerRunner {
       throw e;
     }
 
-    await this.validateOutputManifest(outputManifest, outputDir);
+    await this.validateOutputManifest(outputManifest, this.options.outputDirectory);
 
     return outputManifest;
   }

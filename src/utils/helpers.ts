@@ -24,12 +24,6 @@ export function streamToPromise(stream: NodeJS.ReadableStream): Promise<string> 
     });
 }
 
-export const directory = {
-    input: (task: TaskContract) => path.join(env.inputDir, `task-${task.id}`),
-    output: (task: TaskContract) => path.join(env.outputDir, `task-${task.id}`),
-  };
-
-
 /**
  * This function takes an object tree with all string values expected to be
  * base64 encoded secrets and returns the same tree with the values decrypted
