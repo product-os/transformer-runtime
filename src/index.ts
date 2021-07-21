@@ -1,18 +1,17 @@
 import { ConstructorOptions, InputManifest, OutputManifest, TaskContract } from "./types";
 import fs from 'fs'
 import { decryptSecrets } from "./utils/helpers";
-import Registry from "./lib/registry";
 import env from "./utils/env";
 import path from "path";
-import { ContainerCreateOptions } from "dockerode";
+import Dockerode, { ContainerCreateOptions } from "dockerode";
 export default class TransformerRunner {
 
   options: ConstructorOptions;
-  registry: Registry
+  docker: Dockerode
 
   constructor(options: ConstructorOptions) {
     this.options = options;
-    this.registry = new Registry(options.registryHost, options.registryPort);
+    this.docker = new Dockerode()
   }
 
   // TODO: Remove task contract abstraction, use contract
@@ -35,9 +34,9 @@ export default class TransformerRunner {
       'utf8',
     );
 
-    console.log(`[WORKER] Running transformer image ${this.options.imageRef}`);
+    console.log(`[WORKER] Running transformer image ${this.options.transformerImageRef}`);
 
-    const docker = this.registry.docker;
+    const docker = this.docker;
 
     // docker-in-docker work by mounting a tmpfs for the inner volumes
     const tmpDockerVolume = `tmp-docker-${this.options.inputContract.id}`;
@@ -47,7 +46,7 @@ export default class TransformerRunner {
     process.stderr.end = () => { }
 
     const runResult = await docker.run(
-      this.options.imageRef,
+      this.options.transformerImageRef,
       [],
       [process.stdout, process.stderr],
       {
