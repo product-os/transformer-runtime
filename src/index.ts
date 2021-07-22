@@ -6,11 +6,11 @@ import * as Dockerode from "dockerode";
 import { Contract } from "@balena/jellyfish-types/build/core";
 export default class TransformerRuntime {
 
-  options: ConstructorOptions;
+  decryptionKey: string
   docker: Dockerode
 
-  constructor(options: ConstructorOptions) {
-    this.options = options;
+  constructor(decryptionKey: string) {
+    this.decryptionKey = decryptionKey;
     this.docker = new Dockerode()
   }
 
@@ -22,8 +22,8 @@ export default class TransformerRuntime {
         contract: inputContract,
         transformerContract,
         artifactPath: artifactDirectory,
-        decryptedSecrets: decryptSecrets(this.options.decryptionKey, inputContract.data.$transformer?.encryptedSecrets),
-        decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  transformerContract.data.encryptedSecrets),
+        decryptedSecrets: decryptSecrets(this.decryptionKey, inputContract.data.$transformer?.encryptedSecrets),
+        decryptedTransformerSecrets:  decryptSecrets(this.decryptionKey,  transformerContract.data.encryptedSecrets),
       },
     };
 
