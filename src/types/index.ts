@@ -1,9 +1,5 @@
 import { ContractData, Contract } from "@balena/jellyfish-types/build/core";
 
-export interface ConstructorOptions {
-	decryptionKey: string;
-}
-
 export interface ActorCredentials {
 	slug: string;
 	sessionToken: string;
