@@ -1,12 +1,6 @@
 import { ContractData, Contract } from "@balena/jellyfish-types/build/core";
 
 export interface ConstructorOptions {
-	privileged: boolean;
-	inputDirectory: string;
-	outputDirectory: string;
-	inputContract: ArtifactContract;
-	transformerContract: TransformerContract;
-	transformerImageRef: string;
 	decryptionKey: string;
 }
 

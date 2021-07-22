@@ -1,10 +1,10 @@
-import { ConstructorOptions, InputManifest, OutputManifest, TaskContract } from "./types";
-import fs from 'fs'
+import { ArtifactContract, ConstructorOptions, InputManifest, OutputManifest, TaskContract, TransformerContract } from "./types";
+import * as fs from 'fs'
 import { decryptSecrets } from "./utils/helpers";
-import env from "./utils/env";
-import path from "path";
-import Dockerode, { ContainerCreateOptions } from "dockerode";
-export default class TransformerRunner {
+import * as path from "path";
+import * as Dockerode from "dockerode";
+import { Contract } from "@balena/jellyfish-types/build/core";
+export default class TransformerRuntime {
 
   options: ConstructorOptions;
   docker: Dockerode
@@ -14,56 +14,56 @@ export default class TransformerRunner {
     this.docker = new Dockerode()
   }
 
-  async runTransformer(): Promise<OutputManifest> {
+  async runTransformer(artifactDirectory: string, inputContract: Contract<any>, transformerContract: TransformerContract, imageRef: string, inputDirectory: string, outputDirectory: string, privileged: boolean): Promise<OutputManifest> {
 
     // Add input manifest
     const inputManifest: InputManifest = {
       input: {
-        contract: this.options.inputContract,
-        transformerContract: this.options.transformerContract,
-        artifactPath: env.artifactDirectoryName,
-        decryptedSecrets: decryptSecrets(this.options.decryptionKey, this.options.inputContract.data.$transformer?.encryptedSecrets),
-        decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  this.options.transformerContract.data.encryptedSecrets),
+        contract: inputContract,
+        transformerContract,
+        artifactPath: artifactDirectory,
+        decryptedSecrets: decryptSecrets(this.options.decryptionKey, inputContract.data.$transformer?.encryptedSecrets),
+        decryptedTransformerSecrets:  decryptSecrets(this.options.decryptionKey,  transformerContract.data.encryptedSecrets),
       },
     };
 
     await fs.promises.writeFile(
-      path.join(this.options.inputDirectory, env.inputManifestFilename),
+      path.join(inputDirectory, 'inputManifest.json'),
       JSON.stringify(inputManifest, null, 4),
       'utf8',
     );
 
     // Make sure output directory exists
     try {
-      await (await fs.promises.stat(this.options.outputDirectory)).isDirectory()
+      await (await fs.promises.stat(outputDirectory)).isDirectory()
     } catch (e) {
       if (e.code !== 'ENOENT') {
         throw e;
       } else {
-        await fs.promises.mkdir(this.options.outputDirectory);
+        await fs.promises.mkdir(outputDirectory);
       }
     }
 
-    console.log(`[WORKER] Running transformer image ${this.options.transformerImageRef}`);
+    console.log(`[WORKER] Running transformer image ${imageRef}`);
 
     const docker = this.docker;
 
     // docker-in-docker work by mounting a tmpfs for the inner volumes
-    const tmpDockerVolume = `tmp-docker-${this.options.inputContract.id}`;
+    const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
 
     //HACK - dockerode closes the stream unconditionally
     process.stdout.end = () => { }
     process.stderr.end = () => { }
 
     const runResult = await docker.run(
-      this.options.transformerImageRef,
+      imageRef,
       [],
       [process.stdout, process.stderr],
       {
         Tty: false,
         Env: [
-          `INPUT=${this.options.inputDirectory}/input.json`,
-          `OUTPUT=${this.options.outputDirectory}/output.json`,
+          `INPUT=${inputDirectory}/input.json`,
+          `OUTPUT=${outputDirectory}/output.json`,
         ],
         Volumes: {
           '/input/': {},
@@ -72,14 +72,14 @@ export default class TransformerRunner {
         },
         HostConfig: {
           Init: true, // should ensure that containers never leave zombie processes
-          Privileged: this.options.privileged,
+          Privileged: privileged,
           Binds: [
-            `${path.resolve(this.options.inputDirectory)}:/input/:ro`,
-            `${path.resolve(this.options.outputDirectory)}:/output/`,
+            `${path.resolve(inputDirectory)}:/input/:ro`,
+            `${path.resolve(outputDirectory)}:/output/`,
             `${tmpDockerVolume}:/var/lib/docker`,
           ],
         },
-      } as ContainerCreateOptions,
+      } as Dockerode.ContainerCreateOptions,
     );
 
     console.log(3)
@@ -92,10 +92,10 @@ export default class TransformerRunner {
 
     console.log("[WORKER] run result", JSON.stringify(runResult));
 
-    return await this.validateOutput(output.StatusCode);
+    return await this.validateOutput(output.StatusCode, outputDirectory);
   }
 
-  async validateOutput(transformerExitCode: number) {
+  async validateOutput(transformerExitCode: number, outputDirectory: string) {
     console.log(`[WORKER] Validating transformer output`);
 
     if (transformerExitCode !== 0) {
@@ -108,7 +108,7 @@ export default class TransformerRunner {
     try {
       outputManifest = JSON.parse(
         await fs.promises.readFile(
-          path.join(this.options.outputDirectory, env.outputManifestFilename),
+          path.join(outputDirectory, 'outputManifest.json'),
           'utf8',
         ),
       ) as OutputManifest;
@@ -117,7 +117,7 @@ export default class TransformerRunner {
       throw e;
     }
 
-    await this.validateOutputManifest(outputManifest, this.options.outputDirectory);
+    await this.validateOutputManifest(outputManifest, outputDirectory);
 
     return outputManifest;
   }
