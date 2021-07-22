@@ -1,22 +1,23 @@
 {
-  "name": "transformer-runner-package",
+  "name": "@balena/transformer-runtime",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "npm publish --access restricted"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/product-os/transformer-runner-package.git"
+    "url": "git+https://github.com/product-os/transformer-runtime.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/product-os/transformer-runner-package/issues"
+    "url": "https://github.com/product-os/transformer-runtime/issues"
   },
-  "homepage": "https://github.com/product-os/transformer-runner-package#readme",
+  "homepage": "https://github.com/product-os/transformer-runtime#readme",
   "devDependencies": {
     "@balena/jellyfish-types": "^0.8.12",
     "@types/dockerode": "^3.2.5",
