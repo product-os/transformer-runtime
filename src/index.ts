@@ -49,10 +49,10 @@ export default class TransformerRuntime {
 
     const docker = this.docker;
 
+    // docker-in-docker work by mounting a tmpfs for the inner volumes
+    const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
+    let container: any
     try {
-      // docker-in-docker work by mounting a tmpfs for the inner volumes
-      const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
-
       // Use our own streams that hook into stdout and stderr
       const stdoutStream = new stream.PassThrough()
       const stderrStream  = new stream.PassThrough()
@@ -92,26 +92,24 @@ export default class TransformerRuntime {
         } as Dockerode.ContainerCreateOptions,
       );
 
-      console.log(3)
+      const output = runResult[0];
+      container = runResult[1];
 
       stdoutStream.end()
       stderrStream.end()
-
-      const output = runResult[0];
-      const container = runResult[1];
-
-      await docker.getContainer(container.id).remove({force: true})
-      await docker.getVolume(tmpDockerVolume).remove({force: true})
 
       console.log("[WORKER] run result", JSON.stringify(runResult));
 
       return await this.validateOutput(output.StatusCode, outputDirectory);
     } catch (error) {
       console.error("[WORKER] ERROR RUNNING TRANSFORMER:")
-      console.error(error)
+      throw error
     } finally {
-      // Manually remove volumes
-      await Promise.all((await docker.listVolumes()).Volumes.map((volume) => docker.getVolume(volume.Name).remove({force: true})))
+      // Manually remove volumes and container
+      await docker.getVolume(tmpDockerVolume).remove({force: true})
+      await docker.getVolume(path.resolve(inputDirectory)).remove({force: true})
+      await docker.getVolume(path.resolve(outputDirectory)).remove({force: true})
+      await docker.getContainer(container.id).remove({force: true})
     }
 
   }
