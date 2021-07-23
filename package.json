@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
+  "engines": {
+    "node": ">=14.2.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "publish": "npm publish --access restricted"
@@ -11,10 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/product-os/transformer-runtime.git"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Balena.io. <hello@balena.io>",
   "license": "UNLICENSED",
-  "private": true,
   "bugs": {
     "url": "https://github.com/product-os/transformer-runtime/issues"
   },
