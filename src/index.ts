@@ -4,6 +4,7 @@ import { decryptSecrets } from "./utils/helpers";
 import * as path from "path";
 import * as Dockerode from "dockerode";
 import { Contract } from "@balena/jellyfish-types/build/core";
+import * as stream from 'stream'
 export default class TransformerRuntime {
 
   decryptionKey: string
@@ -48,51 +49,71 @@ export default class TransformerRuntime {
 
     const docker = this.docker;
 
-    // docker-in-docker work by mounting a tmpfs for the inner volumes
-    const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
+    try {
+      // docker-in-docker work by mounting a tmpfs for the inner volumes
+      const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
 
-    //HACK - dockerode closes the stream unconditionally
-    process.stdout.end = () => { }
-    process.stderr.end = () => { }
+      // Use our own streams that hook into stdout and stderr
+      const stdoutStream = new stream.PassThrough()
+      const stderrStream  = new stream.PassThrough()
 
-    const runResult = await docker.run(
-      imageRef,
-      [],
-      [process.stdout, process.stderr],
-      {
-        Tty: false,
-        Env: [
-          `INPUT=${inputDirectory}/input.json`,
-          `OUTPUT=${outputDirectory}/output.json`,
-        ],
-        Volumes: {
-          '/input/': {},
-          '/output/': {},
-          '/var/lib/docker': {} // if the transformers uses docker-in-docker, this is required
-        },
-        HostConfig: {
-          Init: true, // should ensure that containers never leave zombie processes
-          Privileged: privileged,
-          Binds: [
-            `${path.resolve(inputDirectory)}:/input/:ro`,
-            `${path.resolve(outputDirectory)}:/output/`,
-            `${tmpDockerVolume}:/var/lib/docker`,
+      stdoutStream.on('data', (data: Buffer) => {
+        process.stdout.write(data.toString('utf8'))
+      })
+
+      stderrStream.on('data', (data: Buffer) => {
+        process.stderr.write(data.toString('utf8'))
+      })
+
+      const runResult = await docker.run(
+        imageRef,
+        [],
+        [stdoutStream, stderrStream],
+        {
+          Tty: false,
+          Env: [
+            `INPUT=${inputDirectory}/input.json`,
+            `OUTPUT=${outputDirectory}/output.json`,
           ],
-        },
-      } as Dockerode.ContainerCreateOptions,
-    );
+          Volumes: {
+            '/input/': {},
+            '/output/': {},
+            '/var/lib/docker': {} // if the transformers uses docker-in-docker, this is required
+          },
+          HostConfig: {
+            Init: true, // should ensure that containers never leave zombie processes
+            Privileged: privileged,
+            Binds: [
+              `${path.resolve(inputDirectory)}:/input/:ro`,
+              `${path.resolve(outputDirectory)}:/output/`,
+              `${tmpDockerVolume}:/var/lib/docker`,
+            ],
+          },
+        } as Dockerode.ContainerCreateOptions,
+      );
 
-    console.log(3)
+      console.log(3)
 
-    const output = runResult[0];
-    const container = runResult[1];
+      stdoutStream.end()
+      stderrStream.end()
 
-    await docker.getContainer(container.id).remove({force: true})
-    await docker.getVolume(tmpDockerVolume).remove({force: true})
+      const output = runResult[0];
+      const container = runResult[1];
 
-    console.log("[WORKER] run result", JSON.stringify(runResult));
+      await docker.getContainer(container.id).remove({force: true})
+      await docker.getVolume(tmpDockerVolume).remove({force: true})
 
-    return await this.validateOutput(output.StatusCode, outputDirectory);
+      console.log("[WORKER] run result", JSON.stringify(runResult));
+
+      return await this.validateOutput(output.StatusCode, outputDirectory);
+    } catch (error) {
+      console.error("[WORKER] ERROR RUNNING TRANSFORMER:")
+      console.error(error)
+    } finally {
+      // Manually remove volumes
+      await Promise.all((await docker.listVolumes()).Volumes.map((volume) => docker.getVolume(volume.Name).remove({force: true})))
+    }
+
   }
 
   async validateOutput(transformerExitCode: number, outputDirectory: string) {
