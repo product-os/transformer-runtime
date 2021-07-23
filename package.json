@@ -14,6 +14,7 @@
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
+  "private": true,
   "bugs": {
     "url": "https://github.com/product-os/transformer-runtime/issues"
   },
