@@ -51,7 +51,6 @@ export default class TransformerRuntime {
 
     // docker-in-docker work by mounting a tmpfs for the inner volumes
     const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
-    let container: any
     try {
       // Use our own streams that hook into stdout and stderr
       const stdoutStream = new stream.PassThrough()
@@ -97,7 +96,6 @@ export default class TransformerRuntime {
       );
 
       const output = runResult[0];
-      container = runResult[1];
 
       stdoutStream.end()
       stderrStream.end()
@@ -114,12 +112,12 @@ export default class TransformerRuntime {
 
   }
 
-  async cleanup() {
+  async cleanup(labels?: { [key: string]: any }) {
     const docker = new Dockerode();
-    const containers = await docker.listContainers({all: true, filters: {label: 'io.balena.image'}});
+    const containers = await docker.listContainers({all: true, filters: {label: 'io.balena.image', ...labels}});
     console.log(`[WORKER] Removing ${containers.length} containers`);
     await Promise.all(containers.map(container => docker.getContainer(container.Id).remove({force: true})));
-    const volumes = await docker.listVolumes({filters: {label: 'io.balena.image'}});
+    const volumes = await docker.listVolumes({filters: {label: 'io.balena.image', ...labels}});
     console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
     await Promise.all(volumes.Volumes.map(volume => docker.getVolume(volume.Name).remove({force: true})));
   }
