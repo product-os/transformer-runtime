@@ -7,7 +7,7 @@
     "node": ">=14.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"TODO: implement some tests\"",
     "publish": "npm publish --access restricted"
   },
   "repository": {
