@@ -112,12 +112,12 @@ export default class TransformerRuntime {
 
   }
 
-  async cleanup(labels?: { [key: string]: any }) {
+  async cleanup(label?: string) {
     const docker = new Dockerode();
-    const containers = await docker.listContainers({all: true, filters: { labels: { 'io.balena.image': 'true', ...labels } }});
+    const containers = await docker.listContainers({all: true, filters: {label: label || 'io.balena.image'}});
     console.log(`[WORKER] Removing ${containers.length} containers`);
     await Promise.all(containers.map(container => docker.getContainer(container.Id).remove({force: true})));
-    const volumes = await docker.listVolumes({filters: {labels: { 'io.balena.image': 'true', ...labels }}});
+    const volumes = await docker.listVolumes({filters: {label: label || 'io.balena.image'}});
     console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
     await Promise.all(volumes.Volumes.map(volume => docker.getVolume(volume.Name).remove({force: true})));
   }
