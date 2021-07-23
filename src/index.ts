@@ -15,7 +15,7 @@ export default class TransformerRuntime {
     this.docker = new Dockerode()
   }
 
-  async runTransformer(artifactDirectory: string, inputContract: Contract<any>, transformerContract: TransformerContract, imageRef: string, inputDirectory: string, outputDirectory: string, privileged: boolean): Promise<OutputManifest> {
+  async runTransformer(artifactDirectory: string, inputContract: Contract<any>, transformerContract: TransformerContract, imageRef: string, inputDirectory: string, outputDirectory: string, privileged: boolean, labels?: { [key: string]: any }): Promise<OutputManifest> {
 
     // Add input manifest
     const inputManifest: InputManifest = {
@@ -80,6 +80,10 @@ export default class TransformerRuntime {
             '/output/': {},
             '/var/lib/docker': {} // if the transformers uses docker-in-docker, this is required
           },
+          Labels: {
+            'io.balena.image': 'true',
+            ...labels
+          },
           HostConfig: {
             Init: true, // should ensure that containers never leave zombie processes
             Privileged: privileged,
@@ -105,13 +109,19 @@ export default class TransformerRuntime {
       console.error("[WORKER] ERROR RUNNING TRANSFORMER:")
       throw error
     } finally {
-      // Manually remove volumes and container
-      await docker.getVolume(tmpDockerVolume).remove({force: true})
-      await docker.getVolume(path.resolve(inputDirectory)).remove({force: true})
-      await docker.getVolume(path.resolve(outputDirectory)).remove({force: true})
-      await docker.getContainer(container.id).remove({force: true})
+      await this.cleanup()
     }
 
+  }
+
+  async cleanup() {
+    const docker = new Dockerode();
+    const containers = await docker.listContainers({all: true, filters: {label: 'io.balena.image'}});
+    console.log(`[WORKER] Removing ${containers.length} containers`);
+    await Promise.all(containers.map(container => docker.getContainer(container.Id).remove({force: true})));
+    const volumes = await docker.listVolumes({filters: {label: 'io.balena.image'}});
+    console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
+    await Promise.all(volumes.Volumes.map(volume => docker.getVolume(volume.Name).remove({force: true})));
   }
 
   async validateOutput(transformerExitCode: number, outputDirectory: string) {
