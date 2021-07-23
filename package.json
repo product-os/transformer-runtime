@@ -7,8 +7,7 @@
     "node": ">=14.2.0"
   },
   "scripts": {
-    "test": "echo \"TODO: implement some tests\"",
-    "publish": "npm publish --access restricted"
+    "test": "echo \"TODO: implement some tests\""
   },
   "repository": {
     "type": "git",
