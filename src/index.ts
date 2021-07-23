@@ -1,4 +1,4 @@
-import { ArtifactContract, ConstructorOptions, InputManifest, OutputManifest, TaskContract, TransformerContract } from "./types";
+import { InputManifest, OutputManifest, TransformerContract } from "./types";
 import * as fs from 'fs'
 import { decryptSecrets } from "./utils/helpers";
 import * as path from "path";
