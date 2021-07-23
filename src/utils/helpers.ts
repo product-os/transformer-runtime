@@ -1,9 +1,6 @@
 import * as fs from 'fs';
 import { F_OK } from 'constants';
-import { TaskContract } from '../types';
 import NodeRSA = require('node-rsa')
-import path from 'path'
-import env from './env';
 
 
 export const pathExists = async (path: string) => {

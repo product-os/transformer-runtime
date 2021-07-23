@@ -7,10 +7,10 @@ import { Contract } from "@balena/jellyfish-types/build/core";
 import * as stream from 'stream'
 export default class TransformerRuntime {
 
-  decryptionKey: string
+  decryptionKey: string | undefined
   docker: Dockerode
 
-  constructor(decryptionKey: string) {
+  constructor(decryptionKey?: string) {
     this.decryptionKey = decryptionKey;
     this.docker = new Dockerode()
   }
@@ -27,6 +27,17 @@ export default class TransformerRuntime {
         decryptedTransformerSecrets:  decryptSecrets(this.decryptionKey,  transformerContract.data.encryptedSecrets),
       },
     };
+
+    // Make sure input directory exists
+    try {
+      await (await fs.promises.stat(inputDirectory)).isDirectory()
+    } catch (e) {
+      if (e.code !== 'ENOENT') {
+        throw e;
+      } else {
+        await fs.promises.mkdir(inputDirectory);
+      }
+    }
 
     await fs.promises.writeFile(
       path.join(inputDirectory, 'inputManifest.json'),
@@ -80,7 +91,7 @@ export default class TransformerRuntime {
             '/var/lib/docker': {} // if the transformers uses docker-in-docker, this is required
           },
           Labels: {
-            'io.balena.image': 'true',
+            'io.balena.transformer': 'true',
             ...labels
           },
           HostConfig: {
@@ -114,10 +125,10 @@ export default class TransformerRuntime {
 
   async cleanup(label?: string) {
     const docker = new Dockerode();
-    const containers = await docker.listContainers({all: true, filters: {label: label || 'io.balena.image'}});
+    const containers = await docker.listContainers({all: true, filters: {label: label || 'io.balena.transformer'}});
     console.log(`[WORKER] Removing ${containers.length} containers`);
     await Promise.all(containers.map(container => docker.getContainer(container.Id).remove({force: true})));
-    const volumes = await docker.listVolumes({filters: {label: label || 'io.balena.image'}});
+    const volumes = await docker.listVolumes({filters: {label: label || 'io.balena.transformer'}});
     console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
     await Promise.all(volumes.Volumes.map(volume => docker.getVolume(volume.Name).remove({force: true})));
   }
