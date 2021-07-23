@@ -1,6 +1,6 @@
 {
   "name": "@balena/transformer-runtime",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "build/index.js",
   "engines": {
@@ -31,5 +31,8 @@
     "@ahmadnassri/spawn-promise": "^1.2.0",
     "dockerode": "^3.3.0",
     "node-rsa": "^1.1.1"
+  },
+  "versionist": {
+    "publishedAt": "2021-07-23T08:17:37.556Z"
   }
 }
