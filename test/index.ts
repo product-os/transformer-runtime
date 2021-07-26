@@ -10,7 +10,7 @@ const runtime = new TransformerRuntime();
 const img = 'registry.product-os.io/transformer-product-os-source-to-image';
 const version = '1.4.9';
 
-const artifactDir = path.join(__dirname, '..', '..', 'github-integration-test');
+const artifactDir = path.join(__dirname, '..', 'github-integration-test');
 const workingDir = path.join(__dirname, 'in');
 const transformerImage = `${img}:${version}`;
 const outputDir = path.join(__dirname, 'out');
