@@ -2,7 +2,7 @@ import { InputManifest, OutputManifest, TransformerContract } from './types';
 import * as fs from 'fs';
 import { decryptSecrets } from './utils/helpers';
 import * as path from 'path';
-import Dockerode from 'dockerode';
+import * as Dockerode from 'dockerode';
 import { Contract } from '@balena/jellyfish-types/build/core';
 import * as stream from 'stream';
 export default class TransformerRuntime {
