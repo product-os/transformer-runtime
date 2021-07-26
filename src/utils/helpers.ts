@@ -1,24 +1,25 @@
 import * as fs from 'fs';
 import { F_OK } from 'constants';
-import NodeRSA = require('node-rsa')
-
+import NodeRSA from 'node-rsa';
 
 export const pathExists = async (path: string) => {
-    try {
-        await fs.promises.access(path, F_OK);
-        return true;
-    } catch {
-        return false;
-    }
-}
+	try {
+		await fs.promises.access(path, F_OK);
+		return true;
+	} catch {
+		return false;
+	}
+};
 
-export function streamToPromise(stream: NodeJS.ReadableStream): Promise<string> {
-    return new Promise((resolve, reject) => {
-        let buf = '';
-        stream.on('data', (d) => (buf += d.toString()));
-        stream.on('end', () => resolve(buf));
-        stream.on('error', reject);
-    });
+export function streamToPromise(
+	stream: NodeJS.ReadableStream,
+): Promise<string> {
+	return new Promise((resolve, reject) => {
+		let buf = '';
+		stream.on('data', (d) => (buf += d.toString()));
+		stream.on('end', () => resolve(buf));
+		stream.on('error', reject);
+	});
 }
 
 /**
@@ -29,16 +30,22 @@ export function streamToPromise(stream: NodeJS.ReadableStream): Promise<string> 
  *
  * @param encryptedSecrets object that only contains string values or other encryptedSecrets objects
  */
- export function decryptSecrets(secretsKey: string | undefined, sec: any): any {
+export function decryptSecrets(secretsKey: string | undefined, sec: any): any {
 	if (!sec) {
 		return undefined;
 	}
 	if (!secretsKey) {
-		console.log(`WARN: no secrets key provided! Will pass along secrets without decryption. Should not happen in production`)
+		console.log(
+			`WARN: no secrets key provided! Will pass along secrets without decryption. Should not happen in production`,
+		);
 		return sec;
 	}
-	const decryptionKey = new NodeRSA(Buffer.from(secretsKey, 'base64').toString('utf-8'), 'pkcs1', { encryptionScheme: 'pkcs1' });
-	let result: any = {};
+	const decryptionKey = new NodeRSA(
+		Buffer.from(secretsKey, 'base64').toString('utf-8'),
+		'pkcs1',
+		{ encryptionScheme: 'pkcs1' },
+	);
+	const result: any = {};
 	for (const key of Object.keys(sec)) {
 		const val = sec[key];
 		if (typeof val === 'string') {
@@ -46,8 +53,8 @@ export function streamToPromise(stream: NodeJS.ReadableStream): Promise<string> 
 		} else if (typeof val === 'object') {
 			result[key] = exports.decryptSecrets(decryptionKey, val);
 		} else {
-			console.log(`WARN: unknown type in secrets for key ${key}`)
+			console.log(`WARN: unknown type in secrets for key ${key}`);
 		}
 	}
-	return result
+	return result;
 }

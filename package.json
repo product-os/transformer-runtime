@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "echo \"TODO: implement some tests\"",
-    "test:integration": "ts-node test/index.ts"
+    "test:integration": "ts-node test/index.ts",
+    "build": "tsc",
+    "lint-fix": "balena-lint --fix src"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,9 @@
   },
   "homepage": "https://github.com/product-os/transformer-runtime#readme",
   "devDependencies": {
+    "@balena/jellyfish-config": "^1.4.6",
     "@balena/jellyfish-types": "^0.8.12",
+    "@balena/lint": "^6.1.1",
     "@types/dockerode": "^3.2.5",
     "@types/js-yaml": "^4.0.2",
     "@types/node": "^16.3.3",

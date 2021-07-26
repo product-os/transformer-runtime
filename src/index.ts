@@ -1,199 +1,219 @@
-import { InputManifest, OutputManifest, TransformerContract } from "./types";
-import * as fs from 'fs'
-import { decryptSecrets } from "./utils/helpers";
-import * as path from "path";
-import * as Dockerode from "dockerode";
-import { Contract } from "@balena/jellyfish-types/build/core";
-import * as stream from 'stream'
+import { InputManifest, OutputManifest, TransformerContract } from './types';
+import * as fs from 'fs';
+import { decryptSecrets } from './utils/helpers';
+import * as path from 'path';
+import Dockerode from 'dockerode';
+import { Contract } from '@balena/jellyfish-types/build/core';
+import * as stream from 'stream';
 export default class TransformerRuntime {
+	private docker: Dockerode;
 
-  decryptionKey: string | undefined
-  docker: Dockerode
+	constructor(private decryptionKey?: string) {
+		this.docker = new Dockerode();
+	}
 
-  constructor(decryptionKey?: string) {
-    this.decryptionKey = decryptionKey;
-    this.docker = new Dockerode()
-  }
+	async runTransformer(
+		artifactDirectory: string,
+		inputContract: Contract<any>,
+		transformerContract: TransformerContract,
+		imageRef: string,
+		workingDirectory: string,
+		outputDirectory: string,
+		privileged: boolean,
+		labels?: { [key: string]: any },
+	): Promise<OutputManifest> {
+		// Add input manifest
+		const inputManifest: InputManifest = {
+			input: {
+				contract: inputContract,
+				transformerContract,
+				artifactPath: artifactDirectory,
+				decryptedSecrets: decryptSecrets(
+					this.decryptionKey,
+					inputContract.data.$transformer?.encryptedSecrets,
+				),
+				decryptedTransformerSecrets: decryptSecrets(
+					this.decryptionKey,
+					transformerContract.data.encryptedSecrets,
+				),
+			},
+		};
 
-  async runTransformer(artifactDirectory: string, inputContract: Contract<any>, transformerContract: TransformerContract, imageRef: string, workingDirectory: string, outputDirectory: string, privileged: boolean, labels?: { [key: string]: any }): Promise<OutputManifest> {
+		// Make sure input directory exists
+		try {
+			(await fs.promises.stat(workingDirectory)).isDirectory();
+		} catch (e) {
+			if (e.code !== 'ENOENT') {
+				throw e;
+			} else {
+				await fs.promises.mkdir(workingDirectory);
+			}
+		}
 
-    // Add input manifest
-    const inputManifest: InputManifest = {
-      input: {
-        contract: inputContract,
-        transformerContract,
-        artifactPath: artifactDirectory,
-        decryptedSecrets: decryptSecrets(this.decryptionKey, inputContract.data.$transformer?.encryptedSecrets),
-        decryptedTransformerSecrets:  decryptSecrets(this.decryptionKey,  transformerContract.data.encryptedSecrets),
-      },
-    };
+		await fs.promises.writeFile(
+			path.join(workingDirectory, 'inputManifest.json'),
+			JSON.stringify(inputManifest, null, 4),
+			'utf8',
+		);
 
-    // Make sure input directory exists
-    try {
-      await (await fs.promises.stat(workingDirectory)).isDirectory()
-    } catch (e) {
-      if (e.code !== 'ENOENT') {
-        throw e;
-      } else {
-        await fs.promises.mkdir(workingDirectory);
-      }
-    }
+		// Make sure output directory exists
+		try {
+			(await fs.promises.stat(outputDirectory)).isDirectory();
+		} catch (e) {
+			if (e.code !== 'ENOENT') {
+				throw e;
+			} else {
+				await fs.promises.mkdir(outputDirectory);
+			}
+		}
 
-    await fs.promises.writeFile(
-      path.join(workingDirectory, 'inputManifest.json'),
-      JSON.stringify(inputManifest, null, 4),
-      'utf8',
-    );
+		console.log(`[WORKER] Running transformer image ${imageRef}`);
 
-    // Make sure output directory exists
-    try {
-      await (await fs.promises.stat(outputDirectory)).isDirectory()
-    } catch (e) {
-      if (e.code !== 'ENOENT') {
-        throw e;
-      } else {
-        await fs.promises.mkdir(outputDirectory);
-      }
-    }
+		const docker = this.docker;
 
-    console.log(`[WORKER] Running transformer image ${imageRef}`);
+		// docker-in-docker work by mounting a tmpfs for the inner volumes
+		const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
+		try {
+			// Use our own streams that hook into stdout and stderr
+			const stdoutStream = new stream.PassThrough();
+			const stderrStream = new stream.PassThrough();
 
-    const docker = this.docker;
+			stdoutStream.on('data', (data: Buffer) => {
+				process.stdout.write(data.toString('utf8'));
+			});
 
-    // docker-in-docker work by mounting a tmpfs for the inner volumes
-    const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
-    try {
-      // Use our own streams that hook into stdout and stderr
-      const stdoutStream = new stream.PassThrough()
-      const stderrStream  = new stream.PassThrough()
+			stderrStream.on('data', (data: Buffer) => {
+				process.stderr.write(data.toString('utf8'));
+			});
 
-      stdoutStream.on('data', (data: Buffer) => {
-        process.stdout.write(data.toString('utf8'))
-      })
+			const runResult = await docker.run(
+				imageRef,
+				[],
+				[stdoutStream, stderrStream],
+				{
+					Tty: false,
+					Env: [
+						`INPUT=/input/inputManifest.json`,
+						`OUTPUT=/output/outputManifest.json`,
+					],
+					Volumes: {
+						'/input/': {},
+						'/output/': {},
+						'/var/lib/docker': {}, // if the transformers uses docker-in-docker, this is required
+					},
+					Labels: {
+						'io.balena.transformer': 'true',
+						...labels,
+					},
+					HostConfig: {
+						Init: true, // should ensure that containers never leave zombie processes
+						Privileged: privileged,
+						Binds: [
+							`${path.resolve(workingDirectory)}:/input/`,
+							`${path.resolve(artifactDirectory)}:/input/artifact/:ro`,
+							`${path.resolve(outputDirectory)}:/output/`,
+							`${tmpDockerVolume}:/var/lib/docker`,
+						],
+					},
+				} as Dockerode.ContainerCreateOptions,
+			);
 
-      stderrStream.on('data', (data: Buffer) => {
-        process.stderr.write(data.toString('utf8'))
-      })
+			console.log('RINRINRINNRINRIRN');
 
-      const runResult = await docker.run(
-        imageRef,
-        [],
-        [stdoutStream, stderrStream],
-        {
-          Tty: false,
-          Env: [
-            `INPUT=/input/inputManifest.json`,
-            `OUTPUT=/output/outputManifest.json`,
-          ],
-          Volumes: {
-            '/input/': {},
-            '/output/': {},
-            '/var/lib/docker': {} // if the transformers uses docker-in-docker, this is required
-          },
-          Labels: {
-            'io.balena.transformer': 'true',
-            ...labels
-          },
-          HostConfig: {
-            Init: true, // should ensure that containers never leave zombie processes
-            Privileged: privileged,
-            Binds: [
-              `${path.resolve(workingDirectory)}:/input/`,
-              `${path.resolve(artifactDirectory)}:/input/artifact/:ro`,
-              `${path.resolve(outputDirectory)}:/output/`,
-              `${tmpDockerVolume}:/var/lib/docker`,
-            ],
-          },
-        } as Dockerode.ContainerCreateOptions,
-      );
+			const output = runResult[0];
 
-      console.log('RINRINRINNRINRIRN')
+			stdoutStream.end();
+			stderrStream.end();
 
-      const output = runResult[0];
+			console.log('[WORKER] run result', JSON.stringify(runResult));
 
-      stdoutStream.end()
-      stderrStream.end()
+			return await this.validateOutput(output.StatusCode, outputDirectory);
+		} catch (error) {
+			console.error('[WORKER] ERROR RUNNING TRANSFORMER:');
+			throw error;
+		} finally {
+			// await this.cleanup()
+		}
+	}
 
-      console.log("[WORKER] run result", JSON.stringify(runResult));
+	async cleanup(label?: string) {
+		const docker = new Dockerode();
+		const containers = await docker.listContainers({
+			all: true,
+			filters: { label: label || 'io.balena.transformer' },
+		});
+		console.log(`[WORKER] Removing ${containers.length} containers`);
+		await Promise.all(
+			containers.map((container) =>
+				docker.getContainer(container.Id).remove({ force: true }),
+			),
+		);
+		const volumes = await docker.listVolumes({
+			filters: { label: label || 'io.balena.transformer' },
+		});
+		console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
+		await Promise.all(
+			volumes.Volumes.map((volume) =>
+				docker.getVolume(volume.Name).remove({ force: true }),
+			),
+		);
+	}
 
-      return await this.validateOutput(output.StatusCode, outputDirectory);
-    } catch (error) {
-      console.error("[WORKER] ERROR RUNNING TRANSFORMER:")
-      throw error
-    } finally {
-      // await this.cleanup()
-    }
+	async validateOutput(transformerExitCode: number, outputDirectory: string) {
+		console.log(`[WORKER] Validating transformer output`);
 
-  }
+		if (transformerExitCode !== 0) {
+			throw new Error(
+				`Transformer exited with non-zero status code: ${transformerExitCode}`,
+			);
+		}
 
-  async cleanup(label?: string) {
-    const docker = new Dockerode();
-    const containers = await docker.listContainers({all: true, filters: {label: label || 'io.balena.transformer'}});
-    console.log(`[WORKER] Removing ${containers.length} containers`);
-    await Promise.all(containers.map(container => docker.getContainer(container.Id).remove({force: true})));
-    const volumes = await docker.listVolumes({filters: {label: label || 'io.balena.transformer'}});
-    console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
-    await Promise.all(volumes.Volumes.map(volume => docker.getVolume(volume.Name).remove({force: true})));
-  }
+		let outputManifest: OutputManifest;
+		try {
+			outputManifest = JSON.parse(
+				await fs.promises.readFile(
+					path.join(outputDirectory, 'outputManifest.json'),
+					'utf8',
+				),
+			) as OutputManifest;
+		} catch (e) {
+			e.message = `Could not load output manifest: ${e.message}`;
+			throw e;
+		}
 
-  async validateOutput(transformerExitCode: number, outputDirectory: string) {
-    console.log(`[WORKER] Validating transformer output`);
+		await this.validateOutputManifest(outputManifest, outputDirectory);
 
-    if (transformerExitCode !== 0) {
-      throw new Error(
-        `Transformer exited with non-zero status code: ${transformerExitCode}`,
-      );
-    }
+		return outputManifest;
+	}
 
-    let outputManifest;
-    try {
-      outputManifest = JSON.parse(
-        await fs.promises.readFile(
-          path.join(outputDirectory, 'outputManifest.json'),
-          'utf8',
-        ),
-      ) as OutputManifest;
-    } catch (e) {
-      e.message = `Could not load output manifest: ${e.message}`;
-      throw e;
-    }
+	async validateOutputManifest(m: OutputManifest, outputDir: string) {
+		const message = 'Output manifest validation error: ';
+		if (!Array.isArray(m.results)) {
+			throw new Error(`${message} missing results array`);
+		}
 
-    await this.validateOutputManifest(outputManifest, outputDirectory);
+		if (m.results.length < 1) {
+			console.log(`[WORKER] INFO: empty results array`);
+		}
 
-    return outputManifest;
-  }
+		for (const result of m.results) {
+			if (!result.contract || !result.contract.data) {
+				throw new Error(`${message} missing result contract`);
+			}
 
-  async  validateOutputManifest(
-    m: OutputManifest,
-    outputDir: string,
-  ) {
-    const message = 'Output manifest validation error: ';
-    if (!Array.isArray(m.results)) {
-      throw new Error(`${message} missing results array`);
-    }
-
-    if (m.results.length < 1) {
-      console.log(`[WORKER] INFO: empty results array`);
-    }
-
-    for (const result of m.results) {
-      if (!result.contract || !result.contract.data) {
-        throw new Error(`${message} missing result contract`);
-      }
-
-      // Note: artifactPath can be empty
-      if (result.artifactPath) {
-        try {
-          await fs.promises.access(
-            path.join(outputDir, result.artifactPath),
-            fs.constants.R_OK,
-          );
-        } catch (e) {
-          throw new Error(
-            `${message} artifact path ${result.artifactPath} is not readable`,
-          );
-        }
-      }
-    }
-  }
+			// Note: artifactPath can be empty
+			if (result.artifactPath) {
+				try {
+					await fs.promises.access(
+						path.join(outputDir, result.artifactPath),
+						fs.constants.R_OK,
+					);
+				} catch (e) {
+					throw new Error(
+						`${message} artifact path ${result.artifactPath} is not readable`,
+					);
+				}
+			}
+		}
+	}
 }
