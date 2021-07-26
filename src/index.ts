@@ -15,7 +15,7 @@ export default class TransformerRuntime {
     this.docker = new Dockerode()
   }
 
-  async runTransformer(artifactDirectory: string, inputContract: Contract<any>, transformerContract: TransformerContract, imageRef: string, inputDirectory: string, outputDirectory: string, privileged: boolean, labels?: { [key: string]: any }): Promise<OutputManifest> {
+  async runTransformer(artifactDirectory: string, inputContract: Contract<any>, transformerContract: TransformerContract, imageRef: string, workingDirectory: string, outputDirectory: string, privileged: boolean, labels?: { [key: string]: any }): Promise<OutputManifest> {
 
     // Add input manifest
     const inputManifest: InputManifest = {
@@ -30,17 +30,17 @@ export default class TransformerRuntime {
 
     // Make sure input directory exists
     try {
-      await (await fs.promises.stat(inputDirectory)).isDirectory()
+      await (await fs.promises.stat(workingDirectory)).isDirectory()
     } catch (e) {
       if (e.code !== 'ENOENT') {
         throw e;
       } else {
-        await fs.promises.mkdir(inputDirectory);
+        await fs.promises.mkdir(workingDirectory);
       }
     }
 
     await fs.promises.writeFile(
-      path.join(inputDirectory, 'inputManifest.json'),
+      path.join(workingDirectory, 'inputManifest.json'),
       JSON.stringify(inputManifest, null, 4),
       'utf8',
     );
@@ -82,8 +82,8 @@ export default class TransformerRuntime {
         {
           Tty: false,
           Env: [
-            `INPUT=${inputDirectory}/input.json`,
-            `OUTPUT=${outputDirectory}/output.json`,
+            `INPUT=/input/inputManifest.json`,
+            `OUTPUT=/output/outputManifest.json`,
           ],
           Volumes: {
             '/input/': {},
@@ -98,13 +98,16 @@ export default class TransformerRuntime {
             Init: true, // should ensure that containers never leave zombie processes
             Privileged: privileged,
             Binds: [
-              `${path.resolve(inputDirectory)}:/input/:ro`,
+              `${path.resolve(workingDirectory)}:/input/`,
+              `${path.resolve(artifactDirectory)}:/input/artifact/:ro`,
               `${path.resolve(outputDirectory)}:/output/`,
               `${tmpDockerVolume}:/var/lib/docker`,
             ],
           },
         } as Dockerode.ContainerCreateOptions,
       );
+
+      console.log('RINRINRINNRINRIRN')
 
       const output = runResult[0];
 
@@ -118,7 +121,7 @@ export default class TransformerRuntime {
       console.error("[WORKER] ERROR RUNNING TRANSFORMER:")
       throw error
     } finally {
-      await this.cleanup()
+      // await this.cleanup()
     }
 
   }
