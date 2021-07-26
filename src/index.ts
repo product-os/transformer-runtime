@@ -27,7 +27,7 @@ export default class TransformerRuntime {
 			input: {
 				contract: inputContract,
 				transformerContract,
-				artifactPath: artifactDirectory,
+				artifactPath: 'artifact',
 				decryptedSecrets: decryptSecrets(
 					this.decryptionKey,
 					inputContract.data.$transformer?.encryptedSecrets,
