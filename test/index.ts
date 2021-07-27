@@ -31,7 +31,6 @@ async function main() {
 		outputDir,
 		runPrivileged,
 	);
-	console.log(result);
   const artifactContent = await fs.promises.readFile(path.join(artifactDir, 'thefile.txt'))
   const outputContent = await fs.promises.readFile(path.join(outputDir, 'theoutfile.txt'))
   if (artifactContent.toString() === outputContent.toString()) {
