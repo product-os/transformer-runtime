@@ -118,8 +118,6 @@ export default class TransformerRuntime {
 				} as Dockerode.ContainerCreateOptions,
 			);
 
-			console.log('RINRINRINNRINRIRN');
-
 			const output = runResult[0];
 
 			stdoutStream.end();

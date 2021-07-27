@@ -1,0 +1,13 @@
+type: service-source@1.0.0
+version: 1.0.12
+name: a test service
+data:
+  $transformer:
+    dummy: 1
+  platforms: # this field means "I want to be built for these"
+    'linux/amd64': {}
+    # 'linux/arm64': {} # disabled until multi-arch is working without manual changes
+  fragment:
+    type: service@1.0.0
+    data:
+      fooBar: 43
