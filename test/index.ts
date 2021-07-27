@@ -21,6 +21,7 @@ const content = fs
 const contract = yaml.load(content) as Contract;
 
 async function main() {
+  console.log('[TEST] Running integration test...')
 	const result = await runtime.runTransformer(
 		artifactDir,
 		contract,
@@ -31,6 +32,15 @@ async function main() {
 		runPrivileged,
 	);
 	console.log(result);
+  const artifactContent = await fs.promises.readFile(path.join(artifactDir, 'thefile.txt'))
+  const outputContent = await fs.promises.readFile(path.join(outputDir, 'theoutfile.txt'))
+  if (artifactContent.toString() === outputContent.toString()) {
+    console.log('[TEST] Passed test with test transformer!')
+  } else {
+    console.error('[TEST] Failed test, input and output not matching')
+    console.error('[TEST] Artifact content:', artifactContent)
+    console.error('[TEST] Output content:', outputContent)
+  }
 }
 
 main();
