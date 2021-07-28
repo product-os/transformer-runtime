@@ -1,4 +1,4 @@
-# Balena Transformer Runtime Package
+# ProductOS Transformer Runtime Package
 
 This package serves to be an un-opinionated runner of transformers. This package allows you to obtain the minimal functionality to run a transformer by providing input, artifact, and output targets.
 
@@ -43,3 +43,7 @@ async function main() {
 
 main();
 ```
+
+## Create your own transformer
+
+You can follow the tutorial [here](https://docs.google.com/document/d/1iPsyXBjnvzG25hNHztIFsUcLDM1gSAIhNTHJDY8pZJ0/) to create your own transformer.

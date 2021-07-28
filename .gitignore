@@ -2,5 +2,7 @@ node_modules
 build
 github-integration-test
 .vscode
-/test/in
-/test/out
+test/integration/in
+test/integration/out
+package-lock.json
+docs/
