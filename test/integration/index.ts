@@ -1,4 +1,4 @@
-import TransformerRuntime from '../../src';
+import TransformerRuntime from '../../lib';
 import * as yaml from 'js-yaml';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -22,7 +22,7 @@ const contract = yaml.load(content) as Contract;
 
 export async function integrationTest() {
   console.log('[TEST] Running integration test...')
-	const result = await runtime.runTransformer(
+	await runtime.runTransformer(
 		artifactDir,
 		contract,
 		testTransformer,

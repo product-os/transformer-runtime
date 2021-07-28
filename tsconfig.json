@@ -1,4 +1,4 @@
 {
 	"extends": "@balena/jellyfish-config/config/tsconfig.json",
-	"include": ["src"]
+	"include": ["lib"]
 }

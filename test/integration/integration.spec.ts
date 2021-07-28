@@ -1,5 +1,6 @@
 import { integrationTest } from '.'
 
-test('Integration test', () => {
-  expect(integrationTest()).resolves.toBe(undefined)
+test('Integration test', async () => {
+  const result = await integrationTest()
+  return expect(result).toBe(undefined)
 })

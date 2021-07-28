@@ -12,7 +12,7 @@
     "build-test-container": "docker build test/integration/testTransformer -t test-transformer:latest",
     "test": "npm run lint-fix && npm run unit",
     "build": "tsc",
-    "lint-fix": "balena-lint --fix src"
+    "lint-fix": "balena-lint --fix lib"
   },
   "repository": {
     "type": "git",
