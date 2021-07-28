@@ -1,6 +1,6 @@
 import { InputManifest, OutputManifest, TransformerContract } from './types';
 import * as fs from 'fs';
-import { decryptSecrets } from './utils/helpers';
+import { decryptSecrets } from './utils/secrets';
 import * as path from 'path';
 import Dockerode = require('dockerode');
 import { Contract } from '@balena/jellyfish-types/build/core';
@@ -94,7 +94,7 @@ export default class TransformerRuntime {
 					Tty: false,
 					Env: [
 						`INPUT=/input/inputManifest.json`,
-						`OUTPUT=/output/outputManifest.json`,
+						`OUTPUT=/output/output-manifest.json`,
 					],
 					Volumes: {
 						'/input/': {},
@@ -170,7 +170,7 @@ export default class TransformerRuntime {
 		try {
 			outputManifest = JSON.parse(
 				await fs.promises.readFile(
-					path.join(outputDirectory, 'outputManifest.json'),
+					path.join(outputDirectory, 'output-manifest.json'),
 					'utf8',
 				),
 			) as OutputManifest;
