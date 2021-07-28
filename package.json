@@ -7,10 +7,8 @@
     "node": ">=14.2.0"
   },
   "scripts": {
-    "unit": "jest test/unit",
     "integration": "npm run build-test-container && jest --runInBand --bail test/integration",
     "build-test-container": "docker build test/integration/testTransformer -t test-transformer:latest",
-    "test": "npm run lint-fix && npm run unit",
     "build": "tsc",
     "lint-fix": "balena-lint --fix lib"
   },
