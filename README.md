@@ -43,3 +43,7 @@ async function main() {
 
 main()
 ```
+
+## Create your own transformer
+
+You can follow the tutorial [here](https://docs.google.com/document/d/1iPsyXBjnvzG25hNHztIFsUcLDM1gSAIhNTHJDY8pZJ0/) to create your own transformer.

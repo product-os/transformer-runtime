@@ -1,6 +1,6 @@
 import { InputManifest, OutputManifest, TransformerContract } from './types';
 import * as fs from 'fs';
-import { decryptSecrets } from './utils/helpers';
+import { decryptSecrets } from './utils/secrets';
 import * as path from 'path';
 import Dockerode = require('dockerode');
 import { Contract } from '@balena/jellyfish-types/build/core';
