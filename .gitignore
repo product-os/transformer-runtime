@@ -104,3 +104,11 @@ docs/
 # This is just a fail-safe to ensure that if they are generated
 # they are still ignored and not committed.
 package-lock.json
+node_modules
+build
+github-integration-test
+.vscode
+test/integration/in
+test/integration/out
+package-lock.json
+docs/
