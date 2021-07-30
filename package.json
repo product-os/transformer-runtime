@@ -31,16 +31,16 @@
     ]
   },
   "scripts": {
-    "clean": "rimraf build",
+    "clean": "rimraf build test/integration/in/* test/integration/out/*",
     "build": "npm run clean && tsc -p tsconfig.build.json",
-    "lint": "balena-lint lib test && deplint && depcheck --ignore-bin-package --ignores=@types/jest,@ahmadnassri/spawn-promise",
+    "lint": "balena-lint lib test && npm run check && deplint && depcheck --ignore-bin-package --ignores=@types/jest",
     "lint-fix": "balena-lint --fix lib test",
-    "unit": "echo I have no unit tests",
+    "unit": "jest test/unit",
     "test": "npm run lint && npm run unit",
     "doc": "typedoc lib/ && touch docs/.nojekyll",
     "prepack": "npm run build",
     "check": "jellycheck",
-    "build-test-container": "docker build test/integration/testTransformer -t test-transformer:latest",
+    "build-test-container": "docker build test/integration/test-transformer -t test-transformer:latest",
     "integration": "npm run build-test-container && jest --runInBand --bail test/integration"
   },
   "author": "Balena.io. <hello@balena.io>",
@@ -50,7 +50,6 @@
   },
   "homepage": "https://github.com/product-os/transformer-runtime#readme",
   "dependencies": {
-    "@ahmadnassri/spawn-promise": "^1.2.0",
     "dockerode": "^3.3.0",
     "node-rsa": "^1.1.1"
   },
@@ -69,6 +68,7 @@
     "jest": "^27.0.6",
     "js-yaml": "^4.1.0",
     "lint-staged": "^11.1.1",
+    "rimraf": "^3.0.2",
     "simple-git-hooks": "^2.5.1",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
