@@ -10,7 +10,7 @@ const runtime = new TransformerRuntime();
 const img = 'test-transformer';
 const version = 'latest';
 
-const artifactDir = path.join(__dirname, 'artifactDir');
+const artifactDir = path.join(__dirname, 'artifacts');
 const workingDir = path.join(__dirname, 'in');
 const transformerImage = `${img}:${version}`;
 const outputDir = path.join(__dirname, 'out');
