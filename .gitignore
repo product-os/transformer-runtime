@@ -112,3 +112,4 @@ test/integration/in
 test/integration/out
 package-lock.json
 docs/
+output-manifest.json
