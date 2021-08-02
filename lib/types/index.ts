@@ -1,10 +1,4 @@
 import { ContractData, Contract } from '@balena/jellyfish-types/build/core';
-
-export interface ActorCredentials {
-	slug: string;
-	sessionToken: string;
-}
-
 interface TaskData extends ContractData {
 	actor: string;
 	input: ArtifactContract;
@@ -45,19 +39,6 @@ export interface Formula {
 	$$formula: string;
 }
 
-interface LinkData extends ContractData {
-	from: {
-		id: string;
-		type: string;
-	};
-	inverseName: string;
-	to: {
-		id: string;
-		type: string;
-	};
-}
-export interface LinkContract extends Contract<LinkData> {}
-
 export type InputManifest = {
 	input: {
 		contract: ArtifactContract;
@@ -77,10 +58,4 @@ export type OutputManifest = {
 			manifestList?: string[];
 		},
 	];
-};
-
-export type TaskStatusMetadata = {
-	timestamp?: number;
-	duration?: number;
-	message?: string;
 };

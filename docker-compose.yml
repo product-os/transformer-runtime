@@ -1,12 +1,6 @@
 version: "2.1"
 
-services:
-  sut:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        NPM_TOKEN: $NPM_TOKEN
+services: {}
 
 networks:
   internal: {}

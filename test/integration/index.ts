@@ -10,7 +10,7 @@ const runtime = new TransformerRuntime();
 const img = 'test-transformer';
 const version = 'latest';
 
-const artifactDir = path.join(__dirname, 'artifactDir');
+const artifactDir = path.join(__dirname, 'artifacts');
 const workingDir = path.join(__dirname, 'in');
 const transformerImage = `${img}:${version}`;
 const outputDir = path.join(__dirname, 'out');
@@ -21,7 +21,7 @@ const content = fs
 const contract = yaml.load(content) as Contract;
 
 export async function integrationTest() {
-  console.log('[TEST] Running integration test...')
+	console.log('[TEST] Running integration test...');
 	await runtime.runTransformer(
 		artifactDir,
 		contract,
@@ -31,13 +31,17 @@ export async function integrationTest() {
 		outputDir,
 		runPrivileged,
 	);
-  const artifactContent = await fs.promises.readFile(path.join(artifactDir, 'thefile.txt'))
-  const outputContent = await fs.promises.readFile(path.join(outputDir, 'theoutfile.txt'))
-  if (artifactContent.toString() === outputContent.toString()) {
-    console.log('[TEST] Passed test with test transformer!')
-  } else {
-    console.error('[TEST] Failed test, input and output not matching')
-    console.error('[TEST] Artifact content:', artifactContent)
-    console.error('[TEST] Output content:', outputContent)
-  }
+	const artifactContent = await fs.promises.readFile(
+		path.join(artifactDir, 'thefile.txt'),
+	);
+	const outputContent = await fs.promises.readFile(
+		path.join(outputDir, 'theoutfile.txt'),
+	);
+	if (artifactContent.toString() === outputContent.toString()) {
+		console.log('[TEST] Passed test with test transformer!');
+	} else {
+		console.error('[TEST] Failed test, input and output not matching');
+		console.error('[TEST] Artifact content:', artifactContent);
+		console.error('[TEST] Output content:', outputContent);
+	}
 }
