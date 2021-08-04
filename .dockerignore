@@ -3,3 +3,5 @@
 node_modules
 .versionbot
 .github
+Dockerfile
+docker-compose*
