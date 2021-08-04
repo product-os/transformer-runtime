@@ -10,4 +10,4 @@ RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc && \
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
-CMD [ "npm", "run", "integration" ]
+CMD [ "npm", "run", "test:integration" ]
