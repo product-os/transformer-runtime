@@ -41,7 +41,10 @@ async function main() {
 	);
 }
 
-main()
+main().catch(err => {
+	console.log("error executing your transformer:", err);
+	process.exit(1);
+});
 ```
 
 ## Create your own transformer
