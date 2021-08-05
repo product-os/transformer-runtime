@@ -1,6 +1,6 @@
 # ProductOS Transformer Runtime Package
 
-This package serves to be an un-opinionated runner of transformers. This package allows you to obtain the minimal functionality to run a transformer by providing input, artifact, and output targets.
+This package encodes the basic rules for running transformers. This package allows you to obtain the minimal functionality to run a transformer by providing input, artifact, and output targets.
 
 ## Example Usage
 
