@@ -1,0 +1,103 @@
+- commits:
+    - subject: change wording of readme
+      hash: a7840303b9a99dd870f447bc452febba1a5dfa4d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Martin Rauscher
+      nested: []
+    - subject: use balena npm script naming conventions
+      hash: 8513db79ff8f0be14cf772016b133c2fae1306be
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Martin Rauscher
+      nested: []
+    - subject: add error handling to example
+      hash: 17218b726936c7815c0158d6cf002837cd76892e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Martin Rauscher
+      nested: []
+    - subject: Add integration tests
+      hash: 161add4e24f8ff18375bc77e51d73ab90a615436
+      body: |
+        Add unit tests
+
+        Add SUT testing and docker-compose.* files
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Remove unit tests
+      hash: 0dbe9ce591127090392d6441b799cb5d18e9ba9f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Add sut testing and dockerfile
+      hash: 7c66242f9e5c6870e379c662cf267a6e9105e3c6
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: 'test passed, move to lib folder'
+      hash: 99c43045809277c4337453badc467dda4c926b8c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: spec I was working with
+      hash: 50c8a72096c6537d86dcf6251b0c79d5fd03dcfe
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Im really trying on the tests...
+      hash: 91871e7343a27a1b23e02f1570e6fb246064113d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: fix commit hook
+      hash: e7e36c4862903b819f3ed4fd4276b31d4c41c1b3
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Added simple git hooks
+      hash: 0e73c2ff4b0703d1227296bd9a35d52d2b89f05a
+      body: |
+        Moved test into integration folder
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Begin adding readme
+      hash: a9f7145c98b91e2887ff02193d012c20df16ee3e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 0.0.5
+  date: 2021-08-05T11:44:49.289Z
