@@ -1,4 +1,0 @@
-{
-	"extends": "@balena/jellyfish-config/config/tsconfig.json",
-	"include": ["lib"]
-}

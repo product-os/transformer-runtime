@@ -1,6 +1,0 @@
-node_modules
-build
-github-integration-test
-.vscode
-/test/in
-/test/out
