@@ -18,11 +18,9 @@ export function decryptSecrets(secretsKey: string | undefined, sec: any): any {
 		);
 		return sec;
 	}
-	const decryptionKey = new NodeRSA(
-		Buffer.from(secretsKey, 'base64').toString('utf-8'),
-		'pkcs1',
-		{ encryptionScheme: 'pkcs1' },
-	);
+	const decryptionKey = new NodeRSA(secretsKey, 'pkcs1', {
+		encryptionScheme: 'pkcs1',
+	});
 	const result: any = {};
 	for (const key of Object.keys(sec)) {
 		const val = sec[key];
