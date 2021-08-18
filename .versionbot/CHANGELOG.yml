@@ -1,4 +1,15 @@
 - commits:
+    - subject: Remove extra base64 decoding
+      hash: 3067110970cf3ead5da546b5a8dd0df5408e8849
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 0.0.6
+  date: 2021-08-18T14:00:49.837Z
+- commits:
     - subject: change wording of readme
       hash: a7840303b9a99dd870f447bc452febba1a5dfa4d
       body: ''
