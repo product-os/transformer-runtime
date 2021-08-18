@@ -25,7 +25,7 @@ export function decryptSecrets(secretsKey: string | undefined, sec: any): any {
 	for (const key of Object.keys(sec)) {
 		const val = sec[key];
 		if (typeof val === 'string') {
-			result[key] = decryptionKey.decrypt(val, 'base64');
+			result[key] = decryptionKey.decrypt(val, 'utf8');
 		} else if (typeof val === 'object') {
 			result[key] = exports.decryptSecrets(decryptionKey, val);
 		} else {
