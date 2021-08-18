@@ -9,7 +9,6 @@ import { decryptSecrets } from '../../../lib/utils/secrets';
 
 const key = new NodeRSA({ b: 512 });
 const keyString = key.exportKey('pkcs1');
-const keyBase64 = Buffer.from(keyString).toString('base64');
 
 describe('decryptSecrets()', () => {
 	test('should return undefined when no secrets are provided', () => {
@@ -27,7 +26,7 @@ describe('decryptSecrets()', () => {
 		expect.assertions(1);
 
 		try {
-			decryptSecrets(keyBase64, {
+			decryptSecrets(keyString, {
 				buz: 'baz',
 			});
 		} catch (err) {
@@ -43,11 +42,11 @@ describe('decryptSecrets()', () => {
 			encryptionScheme: 'pkcs1',
 		});
 		expect(
-			decryptSecrets(keyBase64, {
-				buz: rsaKey.encrypt(secret, 'base64'),
+			decryptSecrets(keyString, {
+				buz: rsaKey.encrypt(Buffer.from(secret), 'base64'),
 			}),
 		).toEqual({
-			buz: Buffer.from(secret).toString('base64'),
+			buz: secret,
 		});
 	});
 });
