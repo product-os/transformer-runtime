@@ -30,11 +30,11 @@ export default class TransformerRuntime {
 				artifactPath: 'artifact',
 				decryptedSecrets: decryptSecrets(
 					this.decryptionKey,
-					transformerContract.data.encryptedSecrets,
+					inputContract.data.$transformer?.encryptedSecrets,
 				),
 				decryptedTransformerSecrets: decryptSecrets(
 					this.decryptionKey,
-					inputContract.data.$transformer?.encryptedSecrets,
+					transformerContract.data.encryptedSecrets,
 				),
 			},
 		};

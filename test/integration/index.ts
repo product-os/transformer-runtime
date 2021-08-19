@@ -5,7 +5,15 @@ import * as path from 'path';
 import { Contract } from '@balena/jellyfish-types/build/core';
 import testTransformer from './test-transformer';
 
-const runtime = new TransformerRuntime();
+const runtime = new TransformerRuntime(`-----BEGIN RSA PRIVATE KEY-----
+MIIBOgIBAAJBAJxYRmueLGNBHjcrJk+8sIVdmkDrA3VWXrAQIMty3e9De+pFKPp/
+p5ikvmhfPAiIOfTZ2vraMLJqicOmEAa/N4kCAwEAAQJAMng8o1j4M0I+IskHIQ5k
+XWkN9o7nGuW6w1MxgvudsTKu+/+k9cvT3v+/GtpPpFjlPj2cZzHzU6ovkVXgxIX8
+AQIhAP0ALhNqzLoD7rSWu8p68XyW1VABi5PlCaWWF3xhObthAiEAnjLCOSsDNRXa
+aVVrwCy6rvQs+akHCxd20621d37pVSkCIGe4zyr+uff47L/0nACi7qXZYJJwT7zO
+RWoxYmeHpJeBAiA7/B8tMiQLMvgYTK2Itu0qfae4GuFy0TjbVtiiMNsk0QIhAL2a
+cA6N5gOEukVpnD/plpDmI5NmPSXZaxevCoZyIxoZ
+-----END RSA PRIVATE KEY-----`);
 
 const img = 'test-transformer';
 const version = 'latest';
