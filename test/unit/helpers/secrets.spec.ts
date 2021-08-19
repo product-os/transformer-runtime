@@ -43,10 +43,10 @@ describe('decryptSecrets()', () => {
 		});
 		expect(
 			decryptSecrets(keyString, {
-				buz: rsaKey.encrypt(Buffer.from(secret), 'base64'),
+				buz: rsaKey.encrypt(secret, 'base64'),
 			}),
 		).toEqual({
-			buz: secret,
+			buz: Buffer.from(secret).toString('base64'),
 		});
 	});
 });
