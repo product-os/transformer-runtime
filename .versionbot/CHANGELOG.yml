@@ -1,4 +1,15 @@
 - commits:
+    - subject: I think it is working let's pray
+      hash: 862cd3ebd1760744d02c6a9c51f7c75eb13066c2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 0.0.7
+  date: 2021-08-19T12:22:00.391Z
+- commits:
     - subject: Remove extra base64 decoding
       hash: 3067110970cf3ead5da546b5a8dd0df5408e8849
       body: ''
