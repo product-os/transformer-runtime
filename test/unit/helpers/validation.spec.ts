@@ -42,7 +42,6 @@ describe('Validation', () => {
 	});
 
 	test('Output contract validation - success', async () => {
-		console.log('this one');
 		await writeFile(
 			'./output-manifest.json',
 			JSON.stringify({
