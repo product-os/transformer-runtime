@@ -14,7 +14,7 @@ const decryptSecrets = (s, a) => createDecryptor(s)(a);
 
 describe('decryptSecrets()', () => {
 	test('should return undefined when no secrets are provided', () => {
-		expect(decryptSecrets('foobar', undefined)).toBe(undefined);
+		expect(decryptSecrets(keyString, undefined)).toBe(undefined);
 	});
 
 	test('should return secrets as is when key is not provided', () => {

@@ -38,6 +38,7 @@
     "test": "npm run lint && npm run test:unit",
     "test:unit": "jest test/unit",
     "test:integration": "npm run build-test-container && jest --runInBand --bail test/integration",
+    "test:compose": "docker-compose -f docker-compose.test.yml -f docker-compose.yml up --build --exit-code-from=sut",
     "doc": "typedoc lib/ && touch docs/.nojekyll",
     "prepack": "npm run build",
     "check": "jellycheck",
