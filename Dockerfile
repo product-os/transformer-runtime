@@ -1,5 +1,7 @@
 FROM docker:dind
 
+WORKDIR /build
+
 COPY . .
 
 RUN apk add --no-cache docker-cli nodejs npm
