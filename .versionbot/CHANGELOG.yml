@@ -1,4 +1,44 @@
 - commits:
+    - subject: fix integration test setup
+      hash: f10ad371e37dfcd6163851c4f1178f7ad5625d03
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+    - subject: fix decryption of nested objects
+      hash: d9cbb9952603c9b83842f6f243ecab83ceb279d2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+    - subject: oopsie put back
+      hash: 68d5282f6f1e4164df554c6809d27da04021052f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Remove unneeded console log
+      hash: 35165f6ed298b9633890e5b531645175b748cb2e
+      body: |
+        Switch secrets!
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 0.0.8
+  date: 2021-08-20T08:08:09.338Z
+- commits:
     - subject: I think it is working let's pray
       hash: 862cd3ebd1760744d02c6a9c51f7c75eb13066c2
       body: ''
