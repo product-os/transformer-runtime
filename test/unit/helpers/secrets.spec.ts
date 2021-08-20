@@ -5,10 +5,12 @@
  */
 
 import NodeRSA = require('node-rsa');
-import { decryptSecrets } from '../../../lib/utils/secrets';
+import { createDecryptor } from '../../../lib/secrets';
 
 const key = new NodeRSA({ b: 512 });
 const keyString = key.exportKey('pkcs1');
+
+const decryptSecrets = (s, a) => createDecryptor(s)(a);
 
 describe('decryptSecrets()', () => {
 	test('should return undefined when no secrets are provided', () => {

@@ -37,7 +37,7 @@ export default {
 			encryptedSecrets: {
 				buildSecrets: {
 					NPM_TOKEN:
-						'WjdzolKFfsMp0xMxPOEpZizVEFPjKj6nwHzecYlVupHN13JT033Iz6FR4NgUUAkT7W6DHVM+pWPGCQi0hfd/KM5D5bdJLvLYNsTRAC7LUQancYIXy8Zt3BDR6JNeoRVCU8dGjnOX1wflcXgeP/4a9SMuuh5MD3lFzWuW8DYMKDcAchv9hNg5ZXp6ofwsA/QQ589fyrG7FtjozWRL/iBR9nsdh4lvWq3jZvJv1gl215HCMI+oeW6sP9VSBElq/QzH63Nscup+JbsEkTjIzh75s41Jhf0JwKT+1IL/Qcs7jTLwMZ4XEsHArSHD1imZtcj+FvPTebGpH2Tp8zEwVar0jQ==',
+						'hS6LAf/gt343P/gPihbshbd1zdEJGqYwcmyooK3HuwcFqgjajBiwX322YwI+WDlJP7ilUzCAspbWx4/Ch4YuRw==',
 				},
 			},
 		},
@@ -67,7 +67,7 @@ export default {
 		encryptedSecrets: {
 			buildSecrets: {
 				NPM_TOKEN:
-					'WjdzolKFfsMp0xMxPOEpZizVEFPjKj6nwHzecYlVupHN13JT033Iz6FR4NgUUAkT7W6DHVM+pWPGCQi0hfd/KM5D5bdJLvLYNsTRAC7LUQancYIXy8Zt3BDR6JNeoRVCU8dGjnOX1wflcXgeP/4a9SMuuh5MD3lFzWuW8DYMKDcAchv9hNg5ZXp6ofwsA/QQ589fyrG7FtjozWRL/iBR9nsdh4lvWq3jZvJv1gl215HCMI+oeW6sP9VSBElq/QzH63Nscup+JbsEkTjIzh75s41Jhf0JwKT+1IL/Qcs7jTLwMZ4XEsHArSHD1imZtcj+FvPTebGpH2Tp8zEwVar0jQ==',
+					'hS6LAf/gt343P/gPihbshbd1zdEJGqYwcmyooK3HuwcFqgjajBiwX322YwI+WDlJP7ilUzCAspbWx4/Ch4YuRw==',
 			},
 		},
 	},
@@ -267,7 +267,7 @@ export default {
 								encryptedSecrets: {
 									buildSecrets: {
 										NPM_TOKEN:
-											'WjdzolKFfsMp0xMxPOEpZizVEFPjKj6nwHzecYlVupHN13JT033Iz6FR4NgUUAkT7W6DHVM+pWPGCQi0hfd/KM5D5bdJLvLYNsTRAC7LUQancYIXy8Zt3BDR6JNeoRVCU8dGjnOX1wflcXgeP/4a9SMuuh5MD3lFzWuW8DYMKDcAchv9hNg5ZXp6ofwsA/QQ589fyrG7FtjozWRL/iBR9nsdh4lvWq3jZvJv1gl215HCMI+oeW6sP9VSBElq/QzH63Nscup+JbsEkTjIzh75s41Jhf0JwKT+1IL/Qcs7jTLwMZ4XEsHArSHD1imZtcj+FvPTebGpH2Tp8zEwVar0jQ==',
+											'hS6LAf/gt343P/gPihbshbd1zdEJGqYwcmyooK3HuwcFqgjajBiwX322YwI+WDlJP7ilUzCAspbWx4/Ch4YuRw==',
 									},
 								},
 							},
@@ -297,7 +297,7 @@ export default {
 							encryptedSecrets: {
 								buildSecrets: {
 									NPM_TOKEN:
-										'WjdzolKFfsMp0xMxPOEpZizVEFPjKj6nwHzecYlVupHN13JT033Iz6FR4NgUUAkT7W6DHVM+pWPGCQi0hfd/KM5D5bdJLvLYNsTRAC7LUQancYIXy8Zt3BDR6JNeoRVCU8dGjnOX1wflcXgeP/4a9SMuuh5MD3lFzWuW8DYMKDcAchv9hNg5ZXp6ofwsA/QQ589fyrG7FtjozWRL/iBR9nsdh4lvWq3jZvJv1gl215HCMI+oeW6sP9VSBElq/QzH63Nscup+JbsEkTjIzh75s41Jhf0JwKT+1IL/Qcs7jTLwMZ4XEsHArSHD1imZtcj+FvPTebGpH2Tp8zEwVar0jQ==',
+										'hS6LAf/gt343P/gPihbshbd1zdEJGqYwcmyooK3HuwcFqgjajBiwX322YwI+WDlJP7ilUzCAspbWx4/Ch4YuRw==',
 								},
 							},
 						},

@@ -1,15 +1,17 @@
 import { InputManifest, OutputManifest, TransformerContract } from './types';
 import * as fs from 'fs';
-import { decryptSecrets } from './utils/secrets';
+import { createDecryptor } from './secrets';
 import * as path from 'path';
 import Dockerode = require('dockerode');
 import { Contract } from '@balena/jellyfish-types/build/core';
 import * as stream from 'stream';
 export default class TransformerRuntime {
 	private docker: Dockerode;
+	private decryptor: (s: any) => any;
 
-	constructor(private decryptionKey?: string) {
+	constructor(decryptionKey?: string) {
 		this.docker = new Dockerode();
+		this.decryptor = createDecryptor(decryptionKey);
 	}
 
 	async runTransformer(
@@ -28,12 +30,10 @@ export default class TransformerRuntime {
 				contract: inputContract,
 				transformerContract,
 				artifactPath: 'artifact',
-				decryptedSecrets: decryptSecrets(
-					this.decryptionKey,
+				decryptedSecrets: this.decryptor(
 					inputContract.data.$transformer?.encryptedSecrets,
 				),
-				decryptedTransformerSecrets: decryptSecrets(
-					this.decryptionKey,
+				decryptedTransformerSecrets: this.decryptor(
 					transformerContract.data.encryptedSecrets,
 				),
 			},

@@ -1,26 +1,35 @@
 import NodeRSA from 'node-rsa';
 
+export function createDecryptor(key?: string) {
+	const decryptionKey = key
+		? new NodeRSA(key, 'pkcs1', {
+				encryptionScheme: 'pkcs1',
+		  })
+		: undefined;
+	return (s) => decryptSecrets(decryptionKey, s);
+}
+
 /**
  * This function takes an object tree with all string values expected to be
  * base64 encoded secrets and returns the same tree with the values decrypted
  * but again base64 encoded.
  * (The latter allows passing binary secrets as well)
  *
- * @param encryptedSecrets object that only contains string values or other encryptedSecrets objects
+ * @param sec object that only contains string values or other encryptedSecrets objects
  */
-export function decryptSecrets(secretsKey: string | undefined, sec: any): any {
+export function decryptSecrets(
+	decryptionKey: NodeRSA | undefined,
+	sec: any,
+): any {
 	if (!sec) {
 		return undefined;
 	}
-	if (!secretsKey) {
+	if (!decryptionKey) {
 		console.log(
 			`WARN: no secrets key provided! Will pass along secrets without decryption. Should not happen in production`,
 		);
 		return sec;
 	}
-	const decryptionKey = new NodeRSA(secretsKey, 'pkcs1', {
-		encryptionScheme: 'pkcs1',
-	});
 	const result: any = {};
 	for (const key of Object.keys(sec)) {
 		const val = sec[key];
