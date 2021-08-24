@@ -48,7 +48,7 @@ async function main () {
 	}
 
   logger.log('Result', result)
-  fs.writeFile(outputPath, JSON.stringify(result))
+  await fs.writeFile(outputPath, JSON.stringify(result))
 }
 
 main()
