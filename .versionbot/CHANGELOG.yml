@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fix promise on test transformer
+      hash: dcb8c3d0a4b952593b786913c4067f3e616e548b
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 0.0.9
+  date: 2021-08-24T23:42:19.166Z
+- commits:
     - subject: fix integration test setup
       hash: f10ad371e37dfcd6163851c4f1178f7ad5625d03
       body: ''
