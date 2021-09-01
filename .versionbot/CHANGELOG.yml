@@ -1,4 +1,15 @@
 - commits:
+    - subject: erughiur
+      hash: 6b3eeb3b9281c67db7bc9b692268723a45f08848
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 0.0.10
+  date: 2021-09-01T12:33:49.569Z
+- commits:
     - subject: Fix promise on test transformer
       hash: dcb8c3d0a4b952593b786913c4067f3e616e548b
       body: ''
