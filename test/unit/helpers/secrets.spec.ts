@@ -31,7 +31,7 @@ describe('decryptSecrets()', () => {
 			decryptSecrets(keyString, {
 				buz: 'baz',
 			});
-		} catch (err) {
+		} catch (err: any) {
 			expect(err.message).toEqual(
 				'Error during decryption (probably incorrect key). Original error: Error: Incorrect data or key',
 			);

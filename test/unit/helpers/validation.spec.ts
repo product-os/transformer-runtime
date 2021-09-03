@@ -75,7 +75,7 @@ describe('Validation', () => {
 				] as any, // Thanks typescript
 			}),
 		);
-		const out = await runtime.validateOutput(0, '.');
+		const out = await runtime.validateOutput('.');
 		expect(out.results['0'].artifactPath).toBe('.');
 	});
 });

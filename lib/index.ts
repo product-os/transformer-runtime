@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { createDecryptor } from './secrets';
 import * as path from 'path';
 import Dockerode = require('dockerode');
-import { Contract } from '@balena/jellyfish-types/build/core';
+import { Contract, ContractData } from '@balena/jellyfish-types/build/core';
 import * as stream from 'stream';
 export default class TransformerRuntime {
 	private docker: Dockerode;
@@ -42,7 +42,7 @@ export default class TransformerRuntime {
 		// Make sure input directory exists
 		try {
 			(await fs.promises.stat(workingDirectory)).isDirectory();
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 'ENOENT') {
 				throw e;
 			} else {
@@ -59,7 +59,7 @@ export default class TransformerRuntime {
 		// Make sure output directory exists
 		try {
 			(await fs.promises.stat(outputDirectory)).isDirectory();
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 'ENOENT') {
 				throw e;
 			} else {
@@ -118,17 +118,66 @@ export default class TransformerRuntime {
 				} as Dockerode.ContainerCreateOptions,
 			);
 
-			const output = runResult[0];
-
 			stdoutStream.end();
 			stderrStream.end();
 
 			console.log('[WORKER] run result', JSON.stringify(runResult));
 
-			return await this.validateOutput(output.StatusCode, outputDirectory);
-		} catch (error) {
+			return await this.validateOutput(outputDirectory);
+		} catch (error: any) {
 			console.error('[WORKER] ERROR RUNNING TRANSFORMER:');
-			throw error;
+
+			interface ErrorContract extends Contract<ContractData> {
+				name: string;
+				data: { message: string; code: string; [key: string]: string };
+			}
+			// TODO: remove temporary type
+			const errorContractBody: ErrorContract = {
+				name: 'Transformer Runtime Error',
+				data: {
+					message: error.message,
+					code: error.code || '1',
+				},
+				type: 'error@1.0.0',
+				slug: `transformer-runtime-error${new Date().toISOString()}`,
+				id: `transformer-runtime-error${new Date().toISOString()}`,
+				active: true,
+				created_at: new Date().toISOString(),
+				version: '1.0.0',
+				tags: ['transformer-runtime', 'error'],
+				capabilities: [],
+				markers: [],
+				requires: [],
+			};
+
+			// Check if output manifest exists
+			try {
+				await fs.promises.access(
+					path.join(outputDirectory, 'output-manifest.json'),
+					fs.constants.F_OK,
+				);
+				// Read in file since we found it
+				const outputManifest = await fs.promises.readFile(
+					path.join(outputDirectory, 'output-manifest.json'),
+				);
+				// Stick extra data in the contract body
+				errorContractBody.data.outputManifest = JSON.parse(
+					outputManifest.toString(),
+				);
+			} catch (err: any) {
+				if (err.code !== 'ENOENT') {
+					throw err;
+				} // Something really bad happened
+			}
+
+			// Return the output manifest
+			return {
+				results: [
+					{
+						contract: errorContractBody,
+					},
+				],
+			};
 		} finally {
 			// await this.cleanup()
 		}
@@ -157,14 +206,8 @@ export default class TransformerRuntime {
 		);
 	}
 
-	async validateOutput(transformerExitCode: number, outputDirectory: string) {
+	async validateOutput(outputDirectory: string) {
 		console.log(`[WORKER] Validating transformer output`);
-
-		if (transformerExitCode !== 0) {
-			throw new Error(
-				`Transformer exited with non-zero status code: ${transformerExitCode}`,
-			);
-		}
 
 		let outputManifest: OutputManifest;
 		try {
@@ -174,7 +217,7 @@ export default class TransformerRuntime {
 					'utf8',
 				),
 			) as OutputManifest;
-		} catch (e) {
+		} catch (e: any) {
 			e.message = `Could not load output manifest: ${e.message}`;
 			throw e;
 		}
