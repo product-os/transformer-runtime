@@ -174,7 +174,7 @@ export default class TransformerRuntime {
 				],
 			};
 		} finally {
-			// await this.cleanup()
+			await this.cleanup();
 		}
 	}
 
@@ -182,16 +182,24 @@ export default class TransformerRuntime {
 		const docker = new Dockerode();
 		const containers = await docker.listContainers({
 			all: true,
-			filters: { label: label || 'io.balena.transformer' },
+			filters: {
+				label: {
+					[label || 'io.balena.transformer']: true,
+				},
+			},
 		});
-		console.log(`[WORKER] Removing ${containers.length} containers`);
+		console.log(`[WORKER] Removing ${containers.length} containers`, label);
 		await Promise.all(
 			containers.map((container) =>
 				docker.getContainer(container.Id).remove({ force: true }),
 			),
 		);
 		const volumes = await docker.listVolumes({
-			filters: { label: label || 'io.balena.transformer' },
+			filters: {
+				label: {
+					[label || 'io.balena.transformer']: true,
+				},
+			},
 		});
 		console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
 		await Promise.all(
