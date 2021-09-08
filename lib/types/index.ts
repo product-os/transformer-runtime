@@ -1,4 +1,9 @@
-import { ContractData, Contract } from '@balena/jellyfish-types/build/core';
+import {
+	ContractData,
+	Contract,
+	ContractSummary,
+	ContractDefinition,
+} from '@balena/jellyfish-types/build/core';
 interface TaskData extends ContractData {
 	actor: string;
 	input: ArtifactContract;
@@ -61,7 +66,7 @@ export type OutputManifest = {
 };
 
 // Temporary
-export interface ErrorContract extends ContractData {
+export interface ErrorContract extends ContractDefinition {
 	name: string;
 	data: { message: string; code: string; [key: string]: string };
 }

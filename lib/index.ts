@@ -143,6 +143,8 @@ export default class TransformerRuntime {
 					code: error.code || '1',
 				},
 				type: 'error@1.0.0',
+				version: '1.0.0',
+				slug: `error${inputContract.slug}`,
 			};
 
 			// Check if output manifest exists
