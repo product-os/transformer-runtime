@@ -127,7 +127,7 @@ export default class TransformerRuntime {
 		} catch (error: any) {
 			console.error('[WORKER] ERROR RUNNING TRANSFORMER:');
 
-			interface ErrorContract extends Contract<ContractData> {
+			interface ErrorContract extends ContractData {
 				name: string;
 				data: { message: string; code: string; [key: string]: string };
 			}
@@ -139,15 +139,6 @@ export default class TransformerRuntime {
 					code: error.code || '1',
 				},
 				type: 'error@1.0.0',
-				slug: `transformer-runtime-error${new Date().toISOString()}`,
-				id: `transformer-runtime-error${new Date().toISOString()}`,
-				active: true,
-				created_at: new Date().toISOString(),
-				version: '1.0.0',
-				tags: ['transformer-runtime', 'error'],
-				capabilities: [],
-				markers: [],
-				requires: [],
 			};
 
 			// Check if output manifest exists
@@ -174,7 +165,7 @@ export default class TransformerRuntime {
 			return {
 				results: [
 					{
-						contract: errorContractBody,
+						contract: errorContractBody as any,
 					},
 				],
 			};
