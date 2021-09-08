@@ -1,7 +1,6 @@
 import {
 	ContractData,
 	Contract,
-	ContractSummary,
 	ContractDefinition,
 } from '@balena/jellyfish-types/build/core';
 interface TaskData extends ContractData {
@@ -67,8 +66,8 @@ export type OutputManifest = {
 
 // Temporary
 export interface ErrorData extends ContractData {
-  message: string; 
-  code: string;
+	message: string;
+	code: string;
 }
-export interface ErrorContract extends Omit<ContractDefinition<ErrorData>, 'slug'> {
-}
+export interface ErrorContract
+	extends Omit<ContractDefinition<ErrorData>, 'slug'> {}
