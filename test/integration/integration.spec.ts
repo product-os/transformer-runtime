@@ -61,7 +61,7 @@ test('Integration test', async () => {
 test('Failing integration test', async () => {
 	console.log('[TEST] Running integration test...');
 	const outputManifest = await runtime.runTransformer(
-		path.join(__dirname, 'artifactsglehriuhgeiure'),
+		path.join(__dirname, 'artifacts'),
 		contract,
 		testTransformer,
 		'bah',
