@@ -66,7 +66,9 @@ export type OutputManifest = {
 };
 
 // Temporary
-export interface ErrorContract extends Omit<ContractDefinition, 'slug'> {
-	name: string;
-	data: { message: string; code: string; [key: string]: string };
+export interface ErrorData extends ContractData {
+  message: string; 
+  code: string;
+}
+export interface ErrorContract extends Omit<ContractDefinition<ErrorData>, 'slug'> {
 }
