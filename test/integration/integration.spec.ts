@@ -52,5 +52,26 @@ test('Integration test', async () => {
 		console.error('[TEST] Artifact content:', artifactContent);
 		console.error('[TEST] Output content:', outputContent);
 	}
-	expect(outputManifest.results.length).toBeGreaterThan(0);
+	expect(outputManifest.results.length).toEqual(1);
+	// Cleanup
+	await fs.promises.rmdir(workingDir, { recursive: true });
+	await fs.promises.rmdir(outputDir, { recursive: true });
+});
+
+test('Failing integration test', async () => {
+	console.log('[TEST] Running integration test...');
+	const outputManifest = await runtime.runTransformer(
+		path.join(__dirname, 'artifacts'),
+		contract,
+		testTransformer,
+		'bah',
+		workingDir,
+		outputDir,
+		runPrivileged,
+	);
+	console.log('[TEST] There should be an error log above this line');
+	expect(outputManifest.results[0].contract.type).toEqual('error@1.0.0');
+	// Cleanup
+	await fs.promises.rmdir(workingDir, { recursive: true });
+	await fs.promises.rmdir(outputDir, { recursive: true });
 });
