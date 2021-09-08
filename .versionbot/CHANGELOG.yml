@@ -1,4 +1,100 @@
 - commits:
+    - subject: Remove contract summary
+      hash: 469e769835755df590728380274f3af40dec74b3
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Update lib/types/index.ts
+      hash: 74639ed37e86028deeb8a9151885c3561cc5163c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: danthegoodman1
+      nested: []
+    - subject: Omitted slug from extended type
+      hash: e99fc7a0231f24ac86df166f2f99935840f44971
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: fix slug
+      hash: bbfcc30f2f33a509770b3d105f028d44dd31a97a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Added slug and modified type extension
+      hash: 35dbd49dad75d7f695e342c1329fc9a60b7ee96a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Fix error code
+      hash: 24a7bc7baaf651737f1f35ecdc995cb7b5dd0ac6
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Add cleanup back in and fix filter bug
+      hash: de39cf7a21240584c94598534dae5bb7042e58be
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dan Goodman
+      nested: []
+    - subject: Move type and return exit code
+      hash: ad4419ac25a71fb9f7820474be4e34687663ffad
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dan Goodman
+      nested: []
+    - subject: Modified tests to write file for testing
+      hash: 1972ee7119c0b27ef1f4805b0d7f1bedfb1ef1a1
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dan Goodman
+      nested: []
+    - subject: 'Update contract to contractdata only, force type'
+      hash: 63f1f01a51c647f985906891da59f3b070eb5904
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dan Goodman
+      nested: []
+    - subject: Add preliminary error contract handling
+      hash: 86e446015dc52748198b4774d90f8de224811cde
+      body: |
+        Remove error thrown on non zero exit code for transformer
+
+        Remove transformer exit code dependency
+
+        Remove manifest log
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dan Goodman
+      nested: []
+  version: 0.1.0
+  date: 2021-09-08T14:19:39.671Z
+- commits:
     - subject: Fix promise on test transformer
       hash: dcb8c3d0a4b952593b786913c4067f3e616e548b
       body: ''
