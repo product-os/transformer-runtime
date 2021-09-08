@@ -59,3 +59,9 @@ export type OutputManifest = {
 		},
 	];
 };
+
+// Temporary
+export interface ErrorContract extends ContractData {
+	name: string;
+	data: { message: string; code: string; [key: string]: string };
+}

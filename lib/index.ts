@@ -1,9 +1,14 @@
-import { InputManifest, OutputManifest, TransformerContract } from './types';
+import {
+	ErrorContract,
+	InputManifest,
+	OutputManifest,
+	TransformerContract,
+} from './types';
 import * as fs from 'fs';
 import { createDecryptor } from './secrets';
 import * as path from 'path';
 import Dockerode = require('dockerode');
-import { Contract, ContractData } from '@balena/jellyfish-types/build/core';
+import { Contract } from '@balena/jellyfish-types/build/core';
 import * as stream from 'stream';
 export default class TransformerRuntime {
 	private docker: Dockerode;
@@ -123,14 +128,13 @@ export default class TransformerRuntime {
 
 			console.log('[WORKER] run result', JSON.stringify(runResult));
 
-			return await this.validateOutput(outputDirectory);
+			return await this.validateOutput(
+				runResult[0].StatusCode,
+				outputDirectory,
+			);
 		} catch (error: any) {
 			console.error('[WORKER] ERROR RUNNING TRANSFORMER:');
 
-			interface ErrorContract extends ContractData {
-				name: string;
-				data: { message: string; code: string; [key: string]: string };
-			}
 			// TODO: remove temporary type
 			const errorContractBody: ErrorContract = {
 				name: 'Transformer Runtime Error',
@@ -197,17 +201,20 @@ export default class TransformerRuntime {
 		);
 	}
 
-	async validateOutput(outputDirectory: string) {
+	async validateOutput(exitCode: number, outputDirectory: string) {
 		console.log(`[WORKER] Validating transformer output`);
 
 		let outputManifest: OutputManifest;
 		try {
-			outputManifest = JSON.parse(
-				await fs.promises.readFile(
-					path.join(outputDirectory, 'output-manifest.json'),
-					'utf8',
+			outputManifest = {
+				exitCode,
+				...JSON.parse(
+					await fs.promises.readFile(
+						path.join(outputDirectory, 'output-manifest.json'),
+						'utf8',
+					),
 				),
-			) as OutputManifest;
+			} as OutputManifest;
 		} catch (e: any) {
 			e.message = `Could not load output manifest: ${e.message}`;
 			throw e;
