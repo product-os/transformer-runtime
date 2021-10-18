@@ -10,6 +10,11 @@ import * as path from 'path';
 import Dockerode = require('dockerode');
 import { Contract } from '@balena/jellyfish-types/build/core';
 import * as stream from 'stream';
+import { randomUUID } from 'crypto';
+
+const RUN_LABEL = 'io.balena.transformer.run';
+const TRANSFORMER_LABEL = 'io.balena.transformer';
+
 export default class TransformerRuntime {
 	private docker: Dockerode;
 	private decryptor: (s: any) => any;
@@ -29,6 +34,7 @@ export default class TransformerRuntime {
 		privileged: boolean,
 		labels?: { [key: string]: any },
 	): Promise<OutputManifest> {
+		const runId = randomUUID();
 		// Add input manifest
 		const inputManifest: InputManifest = {
 			input: {
@@ -76,8 +82,16 @@ export default class TransformerRuntime {
 
 		const docker = this.docker;
 
-		// docker-in-docker work by mounting a tmpfs for the inner volumes
-		const tmpDockerVolume = `tmp-docker-${inputContract.id}`;
+		// docker-in-docker needs its storage to be a compatible fs
+		const tmpDockerVolume = `tmp-docker-${runId}`;
+		await docker.createVolume({
+			Name: tmpDockerVolume,
+			Labels: {
+				...labels,
+				[TRANSFORMER_LABEL]: 'true',
+				[RUN_LABEL]: runId,
+			},
+		});
 		try {
 			// Use our own streams that hook into stdout and stderr
 			const stdoutStream = new stream.PassThrough();
@@ -107,8 +121,9 @@ export default class TransformerRuntime {
 						'/var/lib/docker': {}, // if the transformers uses docker-in-docker, this is required
 					},
 					Labels: {
-						'io.balena.transformer': 'true',
 						...labels,
+						[TRANSFORMER_LABEL]: 'true',
+						[RUN_LABEL]: runId,
 					},
 					HostConfig: {
 						Init: true, // should ensure that containers never leave zombie processes
@@ -175,21 +190,19 @@ export default class TransformerRuntime {
 				],
 			};
 		} finally {
-			await this.cleanup();
+			await this.cleanup(runId);
 		}
 	}
 
-	async cleanup(label?: string) {
+	private async cleanup(runId: string) {
 		const docker = new Dockerode();
 		const containers = await docker.listContainers({
 			all: true,
 			filters: {
-				label: {
-					[label || 'io.balena.transformer']: true,
-				},
+				label: [`${RUN_LABEL}=${runId}`],
 			},
 		});
-		console.log(`[WORKER] Removing ${containers.length} containers`, label);
+		console.log(`[WORKER] Removing ${containers.length} containers`, runId);
 		await Promise.all(
 			containers.map((container) =>
 				docker.getContainer(container.Id).remove({ force: true }),
@@ -197,12 +210,10 @@ export default class TransformerRuntime {
 		);
 		const volumes = await docker.listVolumes({
 			filters: {
-				label: {
-					[label || 'io.balena.transformer']: true,
-				},
+				label: [`${RUN_LABEL}=${runId}`],
 			},
 		});
-		console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`);
+		console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`, runId);
 		await Promise.all(
 			volumes.Volumes.map((volume) =>
 				docker.getVolume(volume.Name).remove({ force: true }),
