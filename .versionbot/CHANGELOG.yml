@@ -1,4 +1,17 @@
 - commits:
+    - subject: make cleanup pickup only resources of current run
+      hash: 2fd0fdd2ec812babfdf9d119a61b30442ee5d835
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 0.1.1
+  date: 2021-10-18T13:21:57.064Z
+- commits:
     - subject: Remove contract summary
       hash: 469e769835755df590728380274f3af40dec74b3
       body: ''
