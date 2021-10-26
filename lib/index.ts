@@ -145,7 +145,7 @@ export default class TransformerRuntime {
 
 			return await this.validateOutput(
 				runResult[0].StatusCode,
-				outputDirectory,
+				path.resolve(outputDirectory),
 			);
 		} catch (error: any) {
 			console.error('[WORKER] ERROR RUNNING TRANSFORMER:');
@@ -164,12 +164,13 @@ export default class TransformerRuntime {
 			// Check if output manifest exists
 			try {
 				await fs.promises.access(
-					path.join(outputDirectory, 'output-manifest.json'),
+					path.join(path.resolve(outputDirectory), 'output-manifest.json'),
 					fs.constants.F_OK,
 				);
+				console.log('[RUNTIME] Found output manifest');
 				// Read in file since we found it
 				const outputManifest = await fs.promises.readFile(
-					path.join(outputDirectory, 'output-manifest.json'),
+					path.join(path.resolve(outputDirectory), 'output-manifest.json'),
 				);
 				// Stick extra data in the contract body
 				errorContractBody.data.outputManifest = JSON.parse(
@@ -179,6 +180,10 @@ export default class TransformerRuntime {
 				if (err.code !== 'ENOENT') {
 					throw err;
 				} // Something really bad happened
+				console.log(
+					'[RUNTIME] Did not find output manifest in',
+					path.resolve(outputDirectory),
+				);
 			}
 
 			// Return the output manifest
