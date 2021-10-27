@@ -78,7 +78,7 @@ export default class TransformerRuntime {
 			}
 		}
 
-		console.log(`[WORKER] Running transformer image ${imageRef}`);
+		console.log(`[RUNTIME] Running transformer image ${imageRef}`);
 
 		const docker = this.docker;
 
@@ -141,14 +141,14 @@ export default class TransformerRuntime {
 			stdoutStream.end();
 			stderrStream.end();
 
-			console.log('[WORKER] run result', JSON.stringify(runResult));
+			console.log('[RUNTIME] run result', JSON.stringify(runResult));
 
 			return await this.validateOutput(
 				runResult[0].StatusCode,
 				path.resolve(outputDirectory),
 			);
 		} catch (error: any) {
-			console.error('[WORKER] ERROR RUNNING TRANSFORMER:');
+			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:');
 
 			// TODO: remove temporary type
 			const errorContractBody: ErrorContract = {
@@ -207,7 +207,7 @@ export default class TransformerRuntime {
 				label: [`${RUN_LABEL}=${runId}`],
 			},
 		});
-		console.log(`[WORKER] Removing ${containers.length} containers`, runId);
+		console.log(`[RUNTIME] Removing ${containers.length} containers`, runId);
 		await Promise.all(
 			containers.map((container) =>
 				docker.getContainer(container.Id).remove({ force: true }),
@@ -218,7 +218,7 @@ export default class TransformerRuntime {
 				label: [`${RUN_LABEL}=${runId}`],
 			},
 		});
-		console.log(`[WORKER] Removing ${volumes.Volumes.length} volumes`, runId);
+		console.log(`[RUNTIME] Removing ${volumes.Volumes.length} volumes`, runId);
 		await Promise.all(
 			volumes.Volumes.map((volume) =>
 				docker.getVolume(volume.Name).remove({ force: true }),
@@ -227,7 +227,12 @@ export default class TransformerRuntime {
 	}
 
 	async validateOutput(exitCode: number, outputDirectory: string) {
-		console.log(`[WORKER] Validating transformer output`);
+		console.log(`[RUNTIME] Validating transformer output`);
+
+		console.log(
+			'[RUNTIME] Reading output from',
+			path.join(outputDirectory, 'output-manifest.json'),
+		);
 
 		let outputManifest: OutputManifest;
 		try {
@@ -257,7 +262,7 @@ export default class TransformerRuntime {
 		}
 
 		if (m.results.length < 1) {
-			console.log(`[WORKER] INFO: empty results array`);
+			console.log(`[RUNTIME] INFO: empty results array`);
 		}
 
 		for (const result of m.results) {
@@ -272,6 +277,7 @@ export default class TransformerRuntime {
 						path.join(outputDir, result.artifactPath),
 						fs.constants.R_OK,
 					);
+					console.log('[RUNTIME] Successful validation of output');
 				} catch (e) {
 					throw new Error(
 						`${message} artifact path ${result.artifactPath} is not readable`,
