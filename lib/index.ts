@@ -229,6 +229,11 @@ export default class TransformerRuntime {
 	async validateOutput(exitCode: number, outputDirectory: string) {
 		console.log(`[RUNTIME] Validating transformer output`);
 
+		console.log(
+			'[RUNTIME] Reading output from',
+			path.join(outputDirectory, 'output-manifest.json'),
+		);
+
 		let outputManifest: OutputManifest;
 		try {
 			outputManifest = {
@@ -272,6 +277,7 @@ export default class TransformerRuntime {
 						path.join(outputDir, result.artifactPath),
 						fs.constants.R_OK,
 					);
+					console.log('[RUNTIME] Successful validation of output');
 				} catch (e) {
 					throw new Error(
 						`${message} artifact path ${result.artifactPath} is not readable`,
