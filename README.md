@@ -4,7 +4,7 @@ This package encodes the basic rules for running transformers. This package allo
 
 ## Example Usage
 
-Run a transformer of image `example-image:latest`:
+Run a transformer of image `example-image:latest` which has been pulled before:
 
 ```js
 import TransformerRuntime from '../src';
