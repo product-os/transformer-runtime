@@ -32,7 +32,11 @@ export default class TransformerRuntime {
 		workingDirectory: string,
 		outputDirectory: string,
 		privileged: boolean,
-		labels?: { [key: string]: any },
+		labels?: { [key: string]: string },
+		secondaryInput?: Array<{
+			contract: Contract<any>;
+			artifactDirectory: string;
+		}>,
 	): Promise<OutputManifest> {
 		const runId = randomUUID();
 		// Add input manifest
@@ -48,6 +52,11 @@ export default class TransformerRuntime {
 					transformerContract.data.encryptedSecrets,
 				),
 			},
+			// we'll place each secondary input in directories named after the UUID to avoid collisions
+			secondaryInput: secondaryInput?.map((si) => ({
+				contract: si.contract,
+				artifactPath: si.contract.id,
+			})),
 		};
 
 		// Make sure input directory exists
@@ -61,8 +70,9 @@ export default class TransformerRuntime {
 			}
 		}
 
+		const inputManifestFile = 'inputManifest.json';
 		await fs.promises.writeFile(
-			path.join(workingDirectory, 'inputManifest.json'),
+			path.join(workingDirectory, inputManifestFile),
 			JSON.stringify(inputManifest, null, 4),
 			'utf8',
 		);
@@ -105,6 +115,22 @@ export default class TransformerRuntime {
 				process.stderr.write(data.toString('utf8'));
 			});
 
+			const secondaryInputBindings =
+				secondaryInput?.map(
+					(si) =>
+						`${path.resolve(si.artifactDirectory)}:/input/${
+							si.contract.id
+						}/:ro`,
+				) || [];
+
+			const inputManifestBind = `${path.join(
+				path.resolve(workingDirectory),
+				inputManifestFile,
+			)}:/input/${inputManifestFile}:ro`;
+			const inputArtifactBind = `${path.resolve(
+				artifactDirectory,
+			)}:/input/artifact:ro`;
+			const outputBind = `${path.resolve(outputDirectory)}:/output`;
 			const runResult = await docker.run(
 				imageRef,
 				[],
@@ -116,8 +142,6 @@ export default class TransformerRuntime {
 						`OUTPUT=/output/output-manifest.json`,
 					],
 					Volumes: {
-						'/input/': {},
-						'/output/': {},
 						'/var/lib/docker': {}, // if the transformers uses docker-in-docker, this is required
 					},
 					Labels: {
@@ -129,9 +153,10 @@ export default class TransformerRuntime {
 						Init: true, // should ensure that containers never leave zombie processes
 						Privileged: privileged,
 						Binds: [
-							`${path.resolve(workingDirectory)}:/input/`,
-							`${path.resolve(artifactDirectory)}:/input/artifact/:ro`,
-							`${path.resolve(outputDirectory)}:/output/`,
+							inputManifestBind,
+							inputArtifactBind,
+							...secondaryInputBindings,
+							outputBind,
 							`${tmpDockerVolume}:/var/lib/docker`,
 						],
 					},
@@ -148,7 +173,7 @@ export default class TransformerRuntime {
 				path.resolve(outputDirectory),
 			);
 		} catch (error: any) {
-			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:');
+			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:', error);
 
 			// TODO: remove temporary type
 			const errorContractBody: ErrorContract = {
