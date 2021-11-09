@@ -1,4 +1,15 @@
 - commits:
+    - subject: update to 1.0.0
+      hash: e929818a56d9ee2f3b79258d0a64fa90b3a84f47
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+      author: Martin Rauscher
+      nested: []
+  version: 1.0.0
+  date: 2021-11-09T15:32:59.339Z
+- commits:
     - subject: log errors
       hash: 5d492e16cf55ad9e7f32198b8f479b57e1cbcbf8
       body: ''
