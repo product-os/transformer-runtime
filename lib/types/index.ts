@@ -51,6 +51,10 @@ export type InputManifest = {
 		decryptedSecrets?: any;
 		decryptedTransformerSecrets?: any;
 	};
+	secondaryInput?: Array<{
+		contract: Contract<any>;
+		artifactPath: string;
+	}>;
 };
 
 export type OutputManifest = {

@@ -32,7 +32,11 @@ export default class TransformerRuntime {
 		workingDirectory: string,
 		outputDirectory: string,
 		privileged: boolean,
-		labels?: { [key: string]: any },
+		labels?: { [key: string]: string },
+		secondaryInput?: Array<{
+			contract: Contract<any>;
+			artifactDirectory: string;
+		}>,
 	): Promise<OutputManifest> {
 		const runId = randomUUID();
 		// Add input manifest
@@ -48,6 +52,11 @@ export default class TransformerRuntime {
 					transformerContract.data.encryptedSecrets,
 				),
 			},
+			// we'll place each secondary input in directories named after the UUID to avoid collisions
+			secondaryInput: secondaryInput?.map((si) => ({
+				contract: si.contract,
+				artifactPath: si.contract.id,
+			})),
 		};
 
 		// Make sure input directory exists
@@ -105,6 +114,14 @@ export default class TransformerRuntime {
 				process.stderr.write(data.toString('utf8'));
 			});
 
+			const secondaryInputBindings =
+				secondaryInput?.map(
+					(si) =>
+						`${path.resolve(si.artifactDirectory)}:/input/${
+							si.contract.id
+						}/:ro`,
+				) || [];
+
 			const runResult = await docker.run(
 				imageRef,
 				[],
@@ -116,8 +133,6 @@ export default class TransformerRuntime {
 						`OUTPUT=/output/output-manifest.json`,
 					],
 					Volumes: {
-						'/input/': {},
-						'/output/': {},
 						'/var/lib/docker': {}, // if the transformers uses docker-in-docker, this is required
 					},
 					Labels: {
@@ -129,8 +144,9 @@ export default class TransformerRuntime {
 						Init: true, // should ensure that containers never leave zombie processes
 						Privileged: privileged,
 						Binds: [
-							`${path.resolve(workingDirectory)}:/input/`,
+							`${path.resolve(workingDirectory)}:/input/:ro`,
 							`${path.resolve(artifactDirectory)}:/input/artifact/:ro`,
+							...secondaryInputBindings,
 							`${path.resolve(outputDirectory)}:/output/`,
 							`${tmpDockerVolume}:/var/lib/docker`,
 						],
