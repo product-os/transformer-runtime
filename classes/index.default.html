@@ -96,7 +96,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.default.html#cleanup" class="tsd-kind-icon">cleanup</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="index.default.html#cleanup" class="tsd-kind-icon">cleanup</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.default.html#runTransformer" class="tsd-kind-icon">run<wbr>Transformer</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.default.html#validateOutput" class="tsd-kind-icon">validate<wbr>Output</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.default.html#validateOutputManifest" class="tsd-kind-icon">validate<wbr>Output<wbr>Manifest</a></li>
@@ -117,7 +117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L17">lib/index.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L22">lib/index.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -139,7 +139,7 @@
 					<div class="tsd-signature tsd-kind-icon">decryptor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L15">lib/index.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L20">lib/index.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -170,30 +170,30 @@
 					<div class="tsd-signature tsd-kind-icon">docker<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Dockerode</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L14">lib/index.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L19">lib/index.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
 					<a name="cleanup" class="tsd-anchor"></a>
-					<h3>cleanup</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">cleanup<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> cleanup</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">cleanup<span class="tsd-signature-symbol">(</span>runId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L182">lib/index.ts:182</a></li>
+									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L227">lib/index.ts:227</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> label: <span class="tsd-signature-type">string</span></h5>
+									<h5>runId: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -204,13 +204,13 @@
 					<a name="runTransformer" class="tsd-anchor"></a>
 					<h3>run<wbr>Transformer</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">run<wbr>Transformer<span class="tsd-signature-symbol">(</span>artifactDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, inputContract<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Contract</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span>, transformerContract<span class="tsd-signature-symbol">: </span><a href="../interfaces/types.TransformerContract.html" class="tsd-signature-type" data-tsd-kind="Interface">TransformerContract</a>, imageRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, workingDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, outputDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, privileged<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/types.html#OutputManifest" class="tsd-signature-type" data-tsd-kind="Type alias">OutputManifest</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">run<wbr>Transformer<span class="tsd-signature-symbol">(</span>artifactDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, inputContract<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Contract</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span>, transformerContract<span class="tsd-signature-symbol">: </span><a href="../interfaces/types.TransformerContract.html" class="tsd-signature-type" data-tsd-kind="Interface">TransformerContract</a>, imageRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, workingDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, outputDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, privileged<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{}</span>, secondaryInput<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>artifactDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>contract<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Contract</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/types.html#OutputManifest" class="tsd-signature-type" data-tsd-kind="Type alias">OutputManifest</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L22">lib/index.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L27">lib/index.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -240,9 +240,12 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> labels: <span class="tsd-signature-symbol">{}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-index-signature">
-											<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
+											<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">string</span></h5>
 										</li>
 									</ul>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> secondaryInput: <span class="tsd-signature-symbol">{ </span>artifactDirectory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>contract<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Contract</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/types.html#OutputManifest" class="tsd-signature-type" data-tsd-kind="Type alias">OutputManifest</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -259,7 +262,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L213">lib/index.ts:213</a></li>
+									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L254">lib/index.ts:254</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -285,7 +288,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/b05c030/lib/index.ts#L237">lib/index.ts:237</a></li>
+									<li>Defined in <a href="https://github.com/product-os/transformer-runtime/blob/e64ddeb/lib/index.ts#L283">lib/index.ts:283</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -336,7 +339,7 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="index.default.html#docker" class="tsd-kind-icon">docker</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="index.default.html#cleanup" class="tsd-kind-icon">cleanup</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -371,10 +374,11 @@
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 			</ul>
 		</div>
 	</div>
