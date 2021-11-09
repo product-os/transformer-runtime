@@ -70,8 +70,9 @@ export default class TransformerRuntime {
 			}
 		}
 
+		const inputManifestFile = 'inputManifest.json';
 		await fs.promises.writeFile(
-			path.join(workingDirectory, 'inputManifest.json'),
+			path.join(workingDirectory, inputManifestFile),
 			JSON.stringify(inputManifest, null, 4),
 			'utf8',
 		);
@@ -122,6 +123,14 @@ export default class TransformerRuntime {
 						}/:ro`,
 				) || [];
 
+			const inputManifestBind = `${path.join(
+				path.resolve(workingDirectory),
+				inputManifestFile,
+			)}:/input/${inputManifestFile}:ro`;
+			const inputArtifactBind = `${path.resolve(
+				artifactDirectory,
+			)}:/input/artifact:ro`;
+			const outputBind = `${path.resolve(outputDirectory)}:/output`;
 			const runResult = await docker.run(
 				imageRef,
 				[],
@@ -144,10 +153,10 @@ export default class TransformerRuntime {
 						Init: true, // should ensure that containers never leave zombie processes
 						Privileged: privileged,
 						Binds: [
-							`${path.resolve(workingDirectory)}:/input/:ro`,
-							`${path.resolve(artifactDirectory)}:/input/artifact/:ro`,
+							inputManifestBind,
+							inputArtifactBind,
 							...secondaryInputBindings,
-							`${path.resolve(outputDirectory)}:/output/`,
+							outputBind,
 							`${tmpDockerVolume}:/var/lib/docker`,
 						],
 					},
@@ -164,7 +173,7 @@ export default class TransformerRuntime {
 				path.resolve(outputDirectory),
 			);
 		} catch (error: any) {
-			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:');
+			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:', error);
 
 			// TODO: remove temporary type
 			const errorContractBody: ErrorContract = {
