@@ -1,4 +1,27 @@
 - commits:
+    - subject: log errors
+      hash: 5d492e16cf55ad9e7f32198b8f479b57e1cbcbf8
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+    - subject: add generic secondary input feature
+      hash: 135879c717606acef5ecfec7696a2fe94ebb9cb7
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 0.2.0
+  date: 2021-11-09T14:37:46.598Z
+- commits:
     - subject: Add more logging
       hash: 07fccccbbe268368c595ab597384774851b33ddf
       body: ''
