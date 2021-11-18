@@ -1,4 +1,15 @@
 - commits:
+    - subject: put code under Apache2 license
+      hash: 2f255a831a95e846b13bdb967230ae87ec3fef32
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Martin Rauscher
+      nested: []
+  version: 1.0.1
+  date: 2021-11-18T08:34:28.681Z
+- commits:
     - subject: update to 1.0.0
       hash: e929818a56d9ee2f3b79258d0a64fa90b3a84f47
       body: ''
