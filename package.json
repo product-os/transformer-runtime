@@ -1,7 +1,7 @@
 {
   "name": "@balena/transformer-runtime",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/product-os/transformer-runtime.git"
@@ -80,6 +80,6 @@
     "pre-commit": "npx lint-staged"
   },
   "versionist": {
-    "publishedAt": "2021-11-09T15:32:59.600Z"
+    "publishedAt": "2021-11-18T08:31:55.527Z"
   }
 }
