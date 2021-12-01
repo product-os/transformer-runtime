@@ -1,4 +1,21 @@
 - commits:
+    - subject: Reduce balena yml
+      hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+    - subject: Add a balena.yml file to allow transformers to parse this repo
+      hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+  version: 1.2.2
+  date: 2021-12-01T16:37:26.535Z
+- commits:
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
       body: ""
