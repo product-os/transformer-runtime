@@ -7,8 +7,7 @@ data:
   platforms: # this field means "I want to be built for these"
     'linux/amd64': {}
     # 'linux/arm64': {} # disabled until multi-arch is working without manual changes
-  packageName: '@balena/transformer-runtime'
   fragment:
     type: service@1.0.0
     data:
-      fooBar: 43
+      packageName: '@balena/transformer-runtime'
