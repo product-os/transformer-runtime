@@ -1,4 +1,35 @@
 - commits:
+    - subject: fix package name
+      hash: de84ea719301543bfd8b973c4f95565157061508
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+    - subject: Add package name field
+      hash: 0baf7a2b89b22cce95ac32549e48696eed393616
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+    - subject: Reduce balena yml
+      hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+    - subject: Add a balena.yml file to allow transformers to parse this repo
+      hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+  version: 1.2.4
+  date: 2021-12-01T17:50:52.021Z
+- commits:
     - subject: Add package name field
       hash: 0baf7a2b89b22cce95ac32549e48696eed393616
       body: ""
