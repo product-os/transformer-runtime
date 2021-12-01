@@ -1,0 +1,14 @@
+type: type-product-os-t-node-module-source@0.0.3
+version: 1.2.0
+name: Transformer Runtime Package
+data:
+  $transformer:
+    dummy: 1
+  platforms: # this field means "I want to be built for these"
+    'linux/amd64': {}
+    # 'linux/arm64': {} # disabled until multi-arch is working without manual changes
+  fragment:
+    type: service@1.0.0
+    data:
+      fooBar: 43
+slug: type-product-os-t-node-module-source-product-os-transformer-runtime
