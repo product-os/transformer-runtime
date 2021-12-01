@@ -1,4 +1,15 @@
 - commits:
+    - subject: change the type
+      hash: a8155c58bd627d595dc3e33d4807208ce8bdce14
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dan Goodman
+      nested: []
+  version: 1.1.0
+  date: 2021-12-01T16:24:34.465Z
+- commits:
     - subject: update to 1.0.0
       hash: e929818a56d9ee2f3b79258d0a64fa90b3a84f47
       body: ''
