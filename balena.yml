@@ -3,4 +3,5 @@ version: 1.2.4
 name: Transformer Runtime Package
 data:
   $transformer: {}
+  packageName: '@balena/transformer-runtime'
 slug: type-product-os-t-node-module-source-product-os-transformer-runtime

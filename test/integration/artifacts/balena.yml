@@ -10,4 +10,4 @@ data:
   fragment:
     type: service@1.0.0
     data:
-      packageName: '@balena/transformer-runtime'
+      fooBar: 43
