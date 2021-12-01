@@ -1,4 +1,4 @@
-type: service-source@1.0.0
+type: type-product-os-t-node-module-source@0.0.3
 version: 1.0.12
 name: a test service
 data:
