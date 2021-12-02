@@ -1,4 +1,28 @@
 - commits:
+    - subject: comma back
+      hash: 182b08add2d71fa7b6475db8af1b0fb2d73899de
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+    - subject: bumped version to 1.2.7
+      hash: 955261629a002ec3dad67fef15b2eee8491cae0d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: GitHub Ingestor
+    - subject: comment
+      hash: bec9e57c4791652a37145db553e16f75d7fff8ad
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+  version: 1.2.8
+  date: 2021-12-02T15:38:41.041Z
+- commits:
     - subject: comment
       hash: bec9e57c4791652a37145db553e16f75d7fff8ad
       body: ""
