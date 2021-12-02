@@ -37,7 +37,7 @@ async function main() {
 		transformerImage,
 		workingDir,
 		outputDir,
-		runPrivileged,
+		runPrivileged
 	);
 }
 
