@@ -1,5 +1,5 @@
 type: type-product-os-t-node-module-source@0.0.3
-version: 1.2.6
+version: 1.2.7
 name: Transformer Runtime Package
 data:
   $transformer: {}

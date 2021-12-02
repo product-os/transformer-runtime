@@ -1,4 +1,14 @@
 - commits:
+    - subject: comment
+      hash: bec9e57c4791652a37145db553e16f75d7fff8ad
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+  version: 1.2.7
+  date: 2021-12-02T15:01:46.314Z
+- commits:
     - subject: Fix package name
       hash: b035747891e56ef8a676aabbdc741d796d3c0aab
       body: ""
