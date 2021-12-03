@@ -182,6 +182,8 @@ export default class TransformerRuntime {
 					message: error.message,
 					code: error.code || '1',
 					transformer: `${transformerContract.slug}@${transformerContract.version}`,
+					expectedOutputTypes:
+						transformerContract.data?.expectedOutputTypes || [],
 				},
 				type: 'error@1.0.0',
 			};

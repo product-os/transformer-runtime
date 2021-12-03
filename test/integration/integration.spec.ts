@@ -71,6 +71,10 @@ test('Failing integration test', async () => {
 	);
 	console.log('[TEST] There should be an error log above this line');
 	expect(outputManifest.results[0].contract.type).toEqual('error@1.0.0');
+	expect(outputManifest.results[0].contract.data.expectedOutputTypes).toEqual([
+		'transformer@1.0.0',
+		'docker-image@1.0.0',
+	]);
 	// Cleanup
 	await fs.promises.rmdir(workingDir, { recursive: true });
 	await fs.promises.rmdir(outputDir, { recursive: true });
