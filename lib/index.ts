@@ -177,13 +177,13 @@ export default class TransformerRuntime {
 
 			// TODO: remove temporary type
 			const errorContractBody: ErrorContract = {
-				name: 'Transformer Runtime Error',
+				name: `Runtime Error - ${transformerContract.name}`,
 				data: {
 					message: error.message,
 					code: error.code || '1',
+					transformer: `${transformerContract.slug}@${transformerContract.version}`,
 				},
 				type: 'error@1.0.0',
-				version: '1.0.0',
 			};
 
 			// Check if output manifest exists
