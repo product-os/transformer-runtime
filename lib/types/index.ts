@@ -30,6 +30,7 @@ interface TransformerData extends ContractData {
 	};
 	backflowMapping: [BackflowMapping];
 	encryptedSecrets?: any;
+	expectedOutputTypes?: string[];
 }
 
 export interface TransformerContract extends Contract<TransformerData> {}

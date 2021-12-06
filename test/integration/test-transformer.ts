@@ -70,6 +70,7 @@ export default {
 					'hS6LAf/gt343P/gPihbshbd1zdEJGqYwcmyooK3HuwcFqgjajBiwX322YwI+WDlJP7ilUzCAspbWx4/Ch4YuRw==',
 			},
 		},
+		expectedOutputTypes: ['transformer@1.0.0', 'docker-image@1.0.0'],
 	},
 	loop: null,
 	name: 'SourceCode to amd64 container image Transformer',
