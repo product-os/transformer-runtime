@@ -1,4 +1,17 @@
 - commits:
+    - subject: capture log tail in error contracts
+      hash: 131202ef7149f4a41b04c316fafacf54c85dde92
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 1.4.1
+  date: 2021-12-09T14:03:31.441Z
+- commits:
     - subject: Add expectedOutputTypes to the error contract
       hash: 024d8c764225f6cc49a28a46c2de8f80a6ba76ca
       body: ''
