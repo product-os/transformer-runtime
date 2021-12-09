@@ -102,18 +102,22 @@ export default class TransformerRuntime {
 				[RUN_LABEL]: runId,
 			},
 		});
+
+		const stdOutTail: string[] = [];
+		const stdErrTail: string[] = [];
 		try {
 			// Use our own streams that hook into stdout and stderr
 			const stdoutStream = new stream.PassThrough();
 			const stderrStream = new stream.PassThrough();
 
-			stdoutStream.on('data', (data: Buffer) => {
-				process.stdout.write(data.toString('utf8'));
-			});
-
-			stderrStream.on('data', (data: Buffer) => {
-				process.stderr.write(data.toString('utf8'));
-			});
+			const logAndCacheTail = (tail: string[]) => (data: Buffer) => {
+				const line = data.toString('utf8');
+				process.stderr.write(line);
+				tail.push(line);
+				tail = stdOutTail.slice(-10);
+			};
+			stdoutStream.on('data', logAndCacheTail(stdOutTail));
+			stderrStream.on('data', logAndCacheTail(stdErrTail));
 
 			const secondaryInputBindings =
 				secondaryInput?.map(
@@ -166,10 +170,12 @@ export default class TransformerRuntime {
 			stdoutStream.end();
 			stderrStream.end();
 
-			console.log('[RUNTIME] run result', JSON.stringify(runResult));
+			const exitCode = runResult[0].StatusCode;
 
-			return await this.validateOutput(
-				runResult[0].StatusCode,
+			console.log('[RUNTIME] run result', { exitCode });
+
+			return await this.createOutputManifest(
+				exitCode,
 				path.resolve(outputDirectory),
 			);
 		} catch (error: any) {
@@ -177,6 +183,7 @@ export default class TransformerRuntime {
 
 			// TODO: remove temporary type
 			const errorContractBody: ErrorContract = {
+				type: 'error@1.0.0',
 				name: `Runtime Error - ${transformerContract.name}`,
 				data: {
 					message: error.message,
@@ -184,8 +191,9 @@ export default class TransformerRuntime {
 					transformer: `${transformerContract.slug}@${transformerContract.version}`,
 					expectedOutputTypes:
 						transformerContract.data?.expectedOutputTypes || [],
+					stdOutTail,
+					stdErrTail,
 				},
-				type: 'error@1.0.0',
 			};
 
 			// Check if output manifest exists
@@ -253,8 +261,12 @@ export default class TransformerRuntime {
 		);
 	}
 
-	async validateOutput(exitCode: number, outputDirectory: string) {
+	async createOutputManifest(exitCode: number, outputDirectory: string) {
 		console.log(`[RUNTIME] Validating transformer output`);
+
+		if (exitCode !== 0) {
+			throw new Error(`exit-code ${exitCode}`);
+		}
 
 		console.log(
 			'[RUNTIME] Reading output from',
