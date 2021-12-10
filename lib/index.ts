@@ -114,7 +114,9 @@ export default class TransformerRuntime {
 				const line = data.toString('utf8');
 				process.stderr.write(line);
 				tail.push(line);
-				tail = stdOutTail.slice(-10);
+				if (tail.length > 10) {
+					tail.shift();
+				}
 			};
 			stdoutStream.on('data', logAndCacheTail(stdOutTail));
 			stderrStream.on('data', logAndCacheTail(stdErrTail));
