@@ -1,4 +1,17 @@
 - commits:
+    - subject: fix log capturing
+      hash: 99b1d1a73b3d47298ef20e5796e7caaa4daf0cc7
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 1.4.2
+  date: 2021-12-10T09:40:13.661Z
+- commits:
     - subject: capture log tail in error contracts
       hash: 131202ef7149f4a41b04c316fafacf54c85dde92
       body: ''
