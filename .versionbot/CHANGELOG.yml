@@ -1,4 +1,27 @@
 - commits:
+    - subject: ensure error slugs are unique
+      hash: 0551101a66893cf524871a0399c763e3ede3af8d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+    - subject: change stdout/stderr to strings instead of line array
+      hash: 59e8008cfee418e65b16e5e6f46f6bcba6b1a7d6
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 1.4.3
+  date: 2021-12-10T12:23:45.148Z
+- commits:
     - subject: fix log capturing
       hash: 99b1d1a73b3d47298ef20e5796e7caaa4daf0cc7
       body: ''
