@@ -1,4 +1,17 @@
 - commits:
+    - subject: ensure error logs don't have excess new-lines
+      hash: abd5d990628b917b968b4fd129b995ada5fd6b09
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 1.4.4
+  date: 2021-12-10T12:37:37.735Z
+- commits:
     - subject: ensure error slugs are unique
       hash: 0551101a66893cf524871a0399c763e3ede3af8d
       body: ''
