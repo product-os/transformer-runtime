@@ -193,8 +193,8 @@ export default class TransformerRuntime {
 					transformer: `${transformerContract.slug}@${transformerContract.version}`,
 					expectedOutputTypes:
 						transformerContract.data?.expectedOutputTypes ?? [],
-					stdOutTail: stdOutTail.join('\n'),
-					stdErrTail: stdErrTail.join('\n'),
+					stdOutTail: stdOutTail.join(''),
+					stdErrTail: stdErrTail.join(''),
 					$transformer: {
 						// In a graph of transformations many error contracts can be produced
 						// Appending the Transformer slug would help, but it's possible that the same Transformer runs
