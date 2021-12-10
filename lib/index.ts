@@ -184,17 +184,23 @@ export default class TransformerRuntime {
 			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:', error);
 
 			// TODO: remove temporary type
-			const errorContractBody: ErrorContract = {
+			const errorContract: ErrorContract = {
 				type: 'error@1.0.0',
 				name: `Runtime Error - ${transformerContract.name}`,
 				data: {
 					message: error.message,
-					code: error.code || '1',
+					code: error.code ?? '1',
 					transformer: `${transformerContract.slug}@${transformerContract.version}`,
 					expectedOutputTypes:
-						transformerContract.data?.expectedOutputTypes || [],
-					stdOutTail,
-					stdErrTail,
+						transformerContract.data?.expectedOutputTypes ?? [],
+					stdOutTail: stdOutTail.join('\n'),
+					stdErrTail: stdErrTail.join('\n'),
+					$transformer: {
+						// In a graph of transformations many error contracts can be produced
+						// Appending the Transformer slug would help, but it's possible that the same Transformer runs
+						// on several contracts in the graph, so that wouldn't fix the issue
+						slugSuffix: new Date().getTime().toString(),
+					},
 				},
 			};
 
@@ -210,7 +216,7 @@ export default class TransformerRuntime {
 					path.join(path.resolve(outputDirectory), 'output-manifest.json'),
 				);
 				// Stick extra data in the contract body
-				errorContractBody.data.outputManifest = JSON.parse(
+				errorContract.data.outputManifest = JSON.parse(
 					outputManifest.toString(),
 				);
 			} catch (err: any) {
@@ -227,7 +233,7 @@ export default class TransformerRuntime {
 			return {
 				results: [
 					{
-						contract: errorContractBody as any,
+						contract: errorContract,
 					},
 				],
 			};

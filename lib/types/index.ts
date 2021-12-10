@@ -13,7 +13,7 @@ export interface TaskContract extends Contract<TaskData> {}
 
 interface ArtifactData extends ContractData {
 	$transformer?: {
-		artifactReady: boolean;
+		artifactReady?: boolean;
 		baseSlug?: string;
 		slugSuffix?: string; // used to allow transformers customization of generated slugs. needed when creating multiple instances of same type
 		encryptedSecrets?: any;
@@ -61,7 +61,7 @@ export type InputManifest = {
 export type OutputManifest = {
 	results: [
 		{
-			contract: ArtifactContract;
+			contract: Omit<ContractDefinition<ArtifactData>, 'slug'>;
 			artifactPath?: string;
 			imagePath?: string;
 			manifestList?: string[];
@@ -70,7 +70,7 @@ export type OutputManifest = {
 };
 
 // Temporary
-export interface ErrorData extends ContractData {
+export interface ErrorData extends ArtifactData {
 	message: string;
 	code: string;
 }
