@@ -195,6 +195,12 @@ export default class TransformerRuntime {
 						transformerContract.data?.expectedOutputTypes || [],
 					stdOutTail: stdOutTail.join('\n'),
 					stdErrTail: stdErrTail.join('\n'),
+					$transformer: {
+						// In a graph of transformations many error contracts can be produced
+						// Appending the Transformer slug would help, but it's possible that the same Transformer runs
+						// on several contracts in the graph, so that wouldn't fix the issue
+						slugSuffix: new Date().getTime().toString(),
+					},
 				},
 			};
 
