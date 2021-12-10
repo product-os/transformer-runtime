@@ -193,8 +193,8 @@ export default class TransformerRuntime {
 					transformer: `${transformerContract.slug}@${transformerContract.version}`,
 					expectedOutputTypes:
 						transformerContract.data?.expectedOutputTypes || [],
-					stdOutTail,
-					stdErrTail,
+					stdOutTail: stdOutTail.join('\n'),
+					stdErrTail: stdErrTail.join('\n'),
 				},
 			};
 
