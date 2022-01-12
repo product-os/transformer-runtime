@@ -1,4 +1,47 @@
 - commits:
+    - subject: bump version
+      hash: dae703c45c0fc821f59dc1a8e7ba0f11c80243b4
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Remove ci
+      hash: 79f89791558c70c233c928842d5a38f43ba40ed4
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: use npm ci
+      hash: 7541b3e3c0a1d726181c4c6cbc81d8322a3b6120
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: dump jest version
+      hash: 0a8889180546ca4916f98f52c96d16a285ceb46d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+    - subject: Pinning node and npm versions
+      hash: efee6840ae6589510849da5b316838a7c52459ba
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dan Goodman
+      nested: []
+  version: 1.4.5
+  date: 2022-01-12T13:19:47.676Z
+- commits:
     - subject: ensure error logs don't have excess new-lines
       hash: abd5d990628b917b968b4fd129b995ada5fd6b09
       body: ''
