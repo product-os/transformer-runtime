@@ -11,6 +11,10 @@ import Dockerode = require('dockerode');
 import { Contract } from '@balena/jellyfish-types/build/core';
 import * as stream from 'stream';
 import { randomUUID } from 'crypto';
+import debugnyan from 'debugnyan';
+import Logger from 'bunyan';
+
+const defaultLogger = debugnyan('transformer-runtime', {});
 
 const RUN_LABEL = 'io.balena.transformer.run';
 const TRANSFORMER_LABEL = 'io.balena.transformer';
@@ -37,9 +41,16 @@ export default class TransformerRuntime {
 			contract: Contract<any>;
 			artifactDirectory: string;
 		}>,
+		logMeta?: object,
 	): Promise<OutputManifest> {
+		// run-globals
 		const runId = randomUUID();
-		// Add input manifest
+		const log = defaultLogger.child({
+			runId,
+			transformer: transformerContract.id,
+			input: inputContract.id,
+			...logMeta,
+		});
 		const inputManifest: InputManifest = {
 			input: {
 				contract: inputContract,
@@ -88,7 +99,7 @@ export default class TransformerRuntime {
 			}
 		}
 
-		console.log(`[RUNTIME] Running transformer image ${imageRef}`);
+		log.info({ imageRef }, `Running transformer image`);
 
 		const docker = this.docker;
 
@@ -110,16 +121,17 @@ export default class TransformerRuntime {
 			const stdoutStream = new stream.PassThrough();
 			const stderrStream = new stream.PassThrough();
 
-			const logAndCacheTail = (tail: string[]) => (data: Buffer) => {
-				const line = data.toString('utf8');
-				process.stderr.write(line);
-				tail.push(line);
-				if (tail.length > 10) {
-					tail.shift();
-				}
-			};
-			stdoutStream.on('data', logAndCacheTail(stdOutTail));
-			stderrStream.on('data', logAndCacheTail(stdErrTail));
+			const logAndCacheTail =
+				(streamId: string, tail: string[]) => (data: Buffer) => {
+					const line = data.toString('utf8');
+					log.info({ streamId, type: 'tf-log' }, line);
+					tail.push(line);
+					if (tail.length > 10) {
+						tail.shift();
+					}
+				};
+			stdoutStream.on('data', logAndCacheTail('stdout', stdOutTail));
+			stderrStream.on('data', logAndCacheTail('stderr', stdErrTail));
 
 			const secondaryInputBindings =
 				secondaryInput?.map(
@@ -174,14 +186,15 @@ export default class TransformerRuntime {
 
 			const exitCode = runResult[0].StatusCode;
 
-			console.log('[RUNTIME] run result', { exitCode });
+			log.info({ exitCode }, 'run result');
 
 			return await this.createOutputManifest(
 				exitCode,
 				path.resolve(outputDirectory),
+				log,
 			);
 		} catch (error: any) {
-			console.error('[RUNTIME] ERROR RUNNING TRANSFORMER:', error);
+			log.error({ error }, 'ERROR RUNNING TRANSFORMER');
 
 			// TODO: remove temporary type
 			const errorContract: ErrorContract = {
@@ -210,7 +223,7 @@ export default class TransformerRuntime {
 					path.join(path.resolve(outputDirectory), 'output-manifest.json'),
 					fs.constants.F_OK,
 				);
-				console.log('[RUNTIME] Found output manifest');
+				log.info('Found output manifest');
 				// Read in file since we found it
 				const outputManifest = await fs.promises.readFile(
 					path.join(path.resolve(outputDirectory), 'output-manifest.json'),
@@ -223,9 +236,9 @@ export default class TransformerRuntime {
 				if (err.code !== 'ENOENT') {
 					throw err;
 				} // Something really bad happened
-				console.log(
-					'[RUNTIME] Did not find output manifest in',
-					path.resolve(outputDirectory),
+				log.info(
+					{ path: path.resolve(outputDirectory) },
+					'Did not find output manifest',
 				);
 			}
 
@@ -236,13 +249,13 @@ export default class TransformerRuntime {
 						contract: errorContract,
 					},
 				],
-			};
+			} as OutputManifest;
 		} finally {
-			await this.cleanup(runId);
+			await this.cleanup(runId, log);
 		}
 	}
 
-	private async cleanup(runId: string) {
+	async cleanup(runId: string, log: Logger) {
 		const docker = new Dockerode();
 		const containers = await docker.listContainers({
 			all: true,
@@ -250,7 +263,7 @@ export default class TransformerRuntime {
 				label: [`${RUN_LABEL}=${runId}`],
 			},
 		});
-		console.log(`[RUNTIME] Removing ${containers.length} containers`, runId);
+		log.info({ len: containers.length }, `Removing containers`);
 		await Promise.all(
 			containers.map((container) =>
 				docker.getContainer(container.Id).remove({ force: true }),
@@ -261,7 +274,7 @@ export default class TransformerRuntime {
 				label: [`${RUN_LABEL}=${runId}`],
 			},
 		});
-		console.log(`[RUNTIME] Removing ${volumes.Volumes.length} volumes`, runId);
+		log.info({ len: volumes.Volumes.length }, `Removing volumes`);
 		await Promise.all(
 			volumes.Volumes.map((volume) =>
 				docker.getVolume(volume.Name).remove({ force: true }),
@@ -269,47 +282,44 @@ export default class TransformerRuntime {
 		);
 	}
 
-	async createOutputManifest(exitCode: number, outputDirectory: string) {
-		console.log(`[RUNTIME] Validating transformer output`);
+	async createOutputManifest(exitCode: number, dir: string, log: Logger) {
+		log.info(`Validating transformer output`);
 
 		if (exitCode !== 0) {
 			throw new Error(`exit-code ${exitCode}`);
 		}
 
-		console.log(
-			'[RUNTIME] Reading output from',
-			path.join(outputDirectory, 'output-manifest.json'),
-		);
+		const outManifestPath = path.join(dir, 'output-manifest.json');
+		log.info({ outManifestPath }, 'Reading output from');
 
 		let outputManifest: OutputManifest;
 		try {
 			outputManifest = {
 				exitCode,
-				...JSON.parse(
-					await fs.promises.readFile(
-						path.join(outputDirectory, 'output-manifest.json'),
-						'utf8',
-					),
-				),
+				...JSON.parse(await fs.promises.readFile(outManifestPath, 'utf8')),
 			} as OutputManifest;
 		} catch (e: any) {
 			e.message = `Could not load output manifest: ${e.message}`;
 			throw e;
 		}
 
-		await this.validateOutputManifest(outputManifest, outputDirectory);
+		await this.validateOutputManifest(outputManifest, dir, log);
 
 		return outputManifest;
 	}
 
-	async validateOutputManifest(m: OutputManifest, outputDir: string) {
+	async validateOutputManifest(
+		m: OutputManifest,
+		outputDir: string,
+		log: Logger,
+	) {
 		const message = 'Output manifest validation error: ';
 		if (!Array.isArray(m.results)) {
 			throw new Error(`${message} missing results array`);
 		}
 
 		if (m.results.length < 1) {
-			console.log(`[RUNTIME] INFO: empty results array`);
+			log.warn(`empty results array`);
 		}
 
 		for (const result of m.results) {
@@ -324,7 +334,7 @@ export default class TransformerRuntime {
 						path.join(outputDir, result.artifactPath),
 						fs.constants.R_OK,
 					);
-					console.log('[RUNTIME] Successful validation of output');
+					log.info('Successful validation of output');
 				} catch (e) {
 					throw new Error(
 						`${message} artifact path ${result.artifactPath} is not readable`,

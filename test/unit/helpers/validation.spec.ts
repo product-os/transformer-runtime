@@ -1,7 +1,9 @@
+import debugnyan from 'debugnyan';
 import { writeFile } from 'fs/promises';
 import TransformerRuntime from '../../../lib';
 
 const runtime = new TransformerRuntime();
+const defaultLogger = debugnyan('transformer-runtime-tests', {});
 
 describe('Validation', () => {
 	test('Output manifest validation - success', async () => {
@@ -37,6 +39,7 @@ describe('Validation', () => {
 				] as any, // Thanks typescript
 			},
 			'.',
+			defaultLogger,
 		);
 		expect(out).toBe(undefined);
 	});
@@ -75,7 +78,7 @@ describe('Validation', () => {
 				] as any, // Thanks typescript
 			}),
 		);
-		const out = await runtime.createOutputManifest(0, '.');
+		const out = await runtime.createOutputManifest(0, '.', defaultLogger);
 		expect(out.results['0'].artifactPath).toBe('.');
 	});
 });

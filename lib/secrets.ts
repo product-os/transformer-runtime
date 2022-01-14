@@ -1,4 +1,7 @@
+import debugnyan from 'debugnyan';
 import NodeRSA from 'node-rsa';
+
+const log = debugnyan('transformer-runtime:secrets', {});
 
 export function createDecryptor(key?: string) {
 	const decryptionKey = key
@@ -25,8 +28,8 @@ export function decryptSecrets(
 		return undefined;
 	}
 	if (!decryptionKey) {
-		console.log(
-			`WARN: no secrets key provided! Will pass along secrets without decryption. Should not happen in production`,
+		log.warn(
+			`no secrets key provided! Will pass along secrets without decryption. Should not happen in production`,
 		);
 		return sec;
 	}
@@ -38,7 +41,7 @@ export function decryptSecrets(
 		} else if (typeof val === 'object') {
 			result[key] = exports.decryptSecrets(decryptionKey, val);
 		} else {
-			console.log(`WARN: unknown type in secrets for key ${key}`);
+			log.warn({ key }, `unknown type in secrets for key`);
 		}
 	}
 	return result;
