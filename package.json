@@ -51,6 +51,7 @@
   },
   "homepage": "https://github.com/product-os/transformer-runtime#readme",
   "dependencies": {
+    "debugnyan": "^3.0.0",
     "dockerode": "^3.3.0",
     "node-rsa": "^1.1.1"
   },
