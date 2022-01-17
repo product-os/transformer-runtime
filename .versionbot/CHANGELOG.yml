@@ -1,4 +1,17 @@
 - commits:
+    - subject: switch to structured logging via debugnyan
+      hash: 7dc14cf1260e7399949e95b54c71c997eb12f19b
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Martin Rauscher <martin@balena.io>
+        signed-off-by: Martin Rauscher <martin@balena.io>
+      author: Martin Rauscher
+      nested: []
+  version: 1.5.0
+  date: 2022-01-14T19:04:29.399Z
+- commits:
     - subject: bump version
       hash: dae703c45c0fc821f59dc1a8e7ba0f11c80243b4
       body: ''
