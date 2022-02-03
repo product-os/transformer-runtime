@@ -1,4 +1,4 @@
-import { TransformerContract } from '../../lib/types';
+import type { TransformerContract } from '../../lib/types';
 
 export default {
 	id: '841f8bf0-175b-4f37-8b36-23c34baf4716',

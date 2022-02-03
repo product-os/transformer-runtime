@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-import NodeRSA = require('node-rsa');
+import NodeRSA from 'node-rsa';
 import { createDecryptor } from '../../../lib/secrets';
 
 const key = new NodeRSA({ b: 512 });
