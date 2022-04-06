@@ -99,24 +99,25 @@ export default class TransformerRuntime {
 			}
 		}
 
-		log.info({ imageRef }, `Running transformer image`);
-
-		const docker = this.docker;
-
-		// docker-in-docker needs its storage to be a compatible fs
-		const tmpDockerVolume = `tmp-docker-${runId}`;
-		await docker.createVolume({
-			Name: tmpDockerVolume,
-			Labels: {
-				...labels,
-				[TRANSFORMER_LABEL]: 'true',
-				[RUN_LABEL]: runId,
-			},
-		});
-
 		const stdOutTail: string[] = [];
 		const stdErrTail: string[] = [];
+
+		log.info({ imageRef }, `Running transformer image`);
+
 		try {
+			const docker = this.docker;
+
+			// docker-in-docker needs its storage to be a compatible fs
+			const tmpDockerVolume = `tmp-docker-${runId}`;
+			await docker.createVolume({
+				Name: tmpDockerVolume,
+				Labels: {
+					...labels,
+					[TRANSFORMER_LABEL]: 'true',
+					[RUN_LABEL]: runId,
+				},
+			});
+
 			// Use our own streams that hook into stdout and stderr
 			const stdoutStream = new stream.PassThrough();
 			const stderrStream = new stream.PassThrough();
@@ -251,7 +252,9 @@ export default class TransformerRuntime {
 				],
 			} as OutputManifest;
 		} finally {
+			log.info('Cleaning up');
 			await this.cleanup(runId, log);
+			log.info('Cleanup complete');
 		}
 	}
 
