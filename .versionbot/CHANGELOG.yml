@@ -1,7 +1,27 @@
 - commits:
+    - subject: "Unpin nodejs and npm to fix ERROR: unable to select packages"
+      hash: d3d2456a3a2d6d889e55eb832d11dcf75b841cf6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thomas Manning
+      nested: []
+    - subject: Catch volume creation
+      hash: 90de5d4e106a398037fd79688ca617139a58e64a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thomas Manning
+      nested: []
+  version: 1.5.1
+  title: "'Catch volume creation'"
+  date: 2022-04-06T22:28:36.656Z
+- commits:
     - subject: switch to structured logging via debugnyan
       hash: 7dc14cf1260e7399949e95b54c71c997eb12f19b
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -14,7 +34,7 @@
 - commits:
     - subject: bump version
       hash: dae703c45c0fc821f59dc1a8e7ba0f11c80243b4
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -22,7 +42,7 @@
       nested: []
     - subject: Remove ci
       hash: 79f89791558c70c233c928842d5a38f43ba40ed4
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -30,7 +50,7 @@
       nested: []
     - subject: use npm ci
       hash: 7541b3e3c0a1d726181c4c6cbc81d8322a3b6120
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -38,7 +58,7 @@
       nested: []
     - subject: dump jest version
       hash: 0a8889180546ca4916f98f52c96d16a285ceb46d
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -46,7 +66,7 @@
       nested: []
     - subject: Pinning node and npm versions
       hash: efee6840ae6589510849da5b316838a7c52459ba
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -57,7 +77,7 @@
 - commits:
     - subject: ensure error logs don't have excess new-lines
       hash: abd5d990628b917b968b4fd129b995ada5fd6b09
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -70,7 +90,7 @@
 - commits:
     - subject: ensure error slugs are unique
       hash: 0551101a66893cf524871a0399c763e3ede3af8d
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -80,7 +100,7 @@
       nested: []
     - subject: change stdout/stderr to strings instead of line array
       hash: 59e8008cfee418e65b16e5e6f46f6bcba6b1a7d6
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -93,7 +113,7 @@
 - commits:
     - subject: fix log capturing
       hash: 99b1d1a73b3d47298ef20e5796e7caaa4daf0cc7
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -106,7 +126,7 @@
 - commits:
     - subject: capture log tail in error contracts
       hash: 131202ef7149f4a41b04c316fafacf54c85dde92
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -119,7 +139,7 @@
 - commits:
     - subject: Add expectedOutputTypes to the error contract
       hash: 024d8c764225f6cc49a28a46c2de8f80a6ba76ca
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -145,35 +165,35 @@
 - commits:
     - subject: Fix package name
       hash: b035747891e56ef8a676aabbdc741d796d3c0aab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: fix package name
       hash: de84ea719301543bfd8b973c4f95565157061508
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add package name field
       hash: 0baf7a2b89b22cce95ac32549e48696eed393616
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Reduce balena yml
       hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -183,35 +203,35 @@
 - commits:
     - subject: Fix package name
       hash: b035747891e56ef8a676aabbdc741d796d3c0aab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: fix package name
       hash: de84ea719301543bfd8b973c4f95565157061508
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add package name field
       hash: 0baf7a2b89b22cce95ac32549e48696eed393616
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Reduce balena yml
       hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -221,28 +241,28 @@
 - commits:
     - subject: fix package name
       hash: de84ea719301543bfd8b973c4f95565157061508
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add package name field
       hash: 0baf7a2b89b22cce95ac32549e48696eed393616
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Reduce balena yml
       hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -252,21 +272,21 @@
 - commits:
     - subject: Add package name field
       hash: 0baf7a2b89b22cce95ac32549e48696eed393616
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Reduce balena yml
       hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -276,14 +296,14 @@
 - commits:
     - subject: Reduce balena yml
       hash: 229476ad95c61d9f7299b65b0705c6c9486314ab
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -293,7 +313,7 @@
 - commits:
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: c90d2d148522b4358cac84f7dd0d69665fca5af2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -303,21 +323,21 @@
 - commits:
     - subject: Add a balena.yml file to allow transformers to parse this repo
       hash: f18bc1c4864680213303a6a05c1c9b90c63635a8
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: Fixing everything
       hash: 2f979dc1d2e949a005ab5e446c72440cead7e2b8
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: change the type
       hash: a8155c58bd627d595dc3e33d4807208ce8bdce14
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -327,14 +347,14 @@
 - commits:
     - subject: Fixing everything
       hash: 2f979dc1d2e949a005ab5e446c72440cead7e2b8
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
     - subject: change the type
       hash: a8155c58bd627d595dc3e33d4807208ce8bdce14
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -344,7 +364,7 @@
 - commits:
     - subject: update to 1.0.0
       hash: e929818a56d9ee2f3b79258d0a64fa90b3a84f47
-      body: ''
+      body: ""
       footer:
         Change-type: major
         change-type: major
@@ -355,7 +375,7 @@
 - commits:
     - subject: log errors
       hash: 5d492e16cf55ad9e7f32198b8f479b57e1cbcbf8
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -365,7 +385,7 @@
       nested: []
     - subject: add generic secondary input feature
       hash: 135879c717606acef5ecfec7696a2fe94ebb9cb7
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -378,7 +398,7 @@
 - commits:
     - subject: Add more logging
       hash: 07fccccbbe268368c595ab597384774851b33ddf
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -386,7 +406,7 @@
       nested: []
     - subject: Fix logging
       hash: d8b61d588435c9dee16eaaa3fcacef8f4b221314
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -397,7 +417,7 @@
 - commits:
     - subject: Change to make npm publish happen
       hash: f43cb3b31ee9ed5a2438f3168112d0b7476cbc69
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -408,7 +428,7 @@
 - commits:
     - subject: make cleanup pickup only resources of current run
       hash: 2fd0fdd2ec812babfdf9d119a61b30442ee5d835
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -421,7 +441,7 @@
 - commits:
     - subject: Remove contract summary
       hash: 469e769835755df590728380274f3af40dec74b3
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -429,7 +449,7 @@
       nested: []
     - subject: Update lib/types/index.ts
       hash: 74639ed37e86028deeb8a9151885c3561cc5163c
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -437,7 +457,7 @@
       nested: []
     - subject: Omitted slug from extended type
       hash: e99fc7a0231f24ac86df166f2f99935840f44971
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -445,7 +465,7 @@
       nested: []
     - subject: fix slug
       hash: bbfcc30f2f33a509770b3d105f028d44dd31a97a
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -453,7 +473,7 @@
       nested: []
     - subject: Added slug and modified type extension
       hash: 35dbd49dad75d7f695e342c1329fc9a60b7ee96a
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -461,7 +481,7 @@
       nested: []
     - subject: Fix error code
       hash: 24a7bc7baaf651737f1f35ecdc995cb7b5dd0ac6
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -469,7 +489,7 @@
       nested: []
     - subject: Add cleanup back in and fix filter bug
       hash: de39cf7a21240584c94598534dae5bb7042e58be
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -477,7 +497,7 @@
       nested: []
     - subject: Move type and return exit code
       hash: ad4419ac25a71fb9f7820474be4e34687663ffad
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -485,15 +505,15 @@
       nested: []
     - subject: Modified tests to write file for testing
       hash: 1972ee7119c0b27ef1f4805b0d7f1bedfb1ef1a1
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
       author: Dan Goodman
       nested: []
-    - subject: 'Update contract to contractdata only, force type'
+    - subject: Update contract to contractdata only, force type
       hash: 63f1f01a51c647f985906891da59f3b070eb5904
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -517,7 +537,7 @@
 - commits:
     - subject: Fix promise on test transformer
       hash: dcb8c3d0a4b952593b786913c4067f3e616e548b
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -528,7 +548,7 @@
 - commits:
     - subject: fix integration test setup
       hash: f10ad371e37dfcd6163851c4f1178f7ad5625d03
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -538,7 +558,7 @@
       nested: []
     - subject: fix decryption of nested objects
       hash: d9cbb9952603c9b83842f6f243ecab83ceb279d2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -548,7 +568,7 @@
       nested: []
     - subject: oopsie put back
       hash: 68d5282f6f1e4164df554c6809d27da04021052f
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -568,7 +588,7 @@
 - commits:
     - subject: I think it is working let's pray
       hash: 862cd3ebd1760744d02c6a9c51f7c75eb13066c2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -579,7 +599,7 @@
 - commits:
     - subject: Remove extra base64 decoding
       hash: 3067110970cf3ead5da546b5a8dd0df5408e8849
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -590,7 +610,7 @@
 - commits:
     - subject: change wording of readme
       hash: a7840303b9a99dd870f447bc452febba1a5dfa4d
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -598,7 +618,7 @@
       nested: []
     - subject: use balena npm script naming conventions
       hash: 8513db79ff8f0be14cf772016b133c2fae1306be
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -606,7 +626,7 @@
       nested: []
     - subject: add error handling to example
       hash: 17218b726936c7815c0158d6cf002837cd76892e
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -625,7 +645,7 @@
       nested: []
     - subject: Remove unit tests
       hash: 0dbe9ce591127090392d6441b799cb5d18e9ba9f
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -633,15 +653,15 @@
       nested: []
     - subject: Add sut testing and dockerfile
       hash: 7c66242f9e5c6870e379c662cf267a6e9105e3c6
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
       author: Dan Goodman
       nested: []
-    - subject: 'test passed, move to lib folder'
+    - subject: test passed, move to lib folder
       hash: 99c43045809277c4337453badc467dda4c926b8c
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -649,7 +669,7 @@
       nested: []
     - subject: spec I was working with
       hash: 50c8a72096c6537d86dcf6251b0c79d5fd03dcfe
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -657,7 +677,7 @@
       nested: []
     - subject: Im really trying on the tests...
       hash: 91871e7343a27a1b23e02f1570e6fb246064113d
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -665,7 +685,7 @@
       nested: []
     - subject: fix commit hook
       hash: e7e36c4862903b819f3ed4fd4276b31d4c41c1b3
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -682,7 +702,7 @@
       nested: []
     - subject: Begin adding readme
       hash: a9f7145c98b91e2887ff02193d012c20df16ee3e
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
