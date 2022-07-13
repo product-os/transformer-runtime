@@ -1,4 +1,20 @@
 - commits:
+    - subject: Rename relationship 'was built into' to 'was transformed to'.
+      hash: a7604794c028f83159f95cf20e5a010a8a3f01ca
+      body: |
+        Also renames the inverse relationship 'was built from' to
+        'was transformed from'.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+        signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+      author: Carlo Miguel F. Cruz
+      nested: []
+  version: 1.5.2
+  title: "'Rename relationship 'was built into' to 'was transformed to'.'"
+  date: 2022-07-13T14:28:20.989Z
+- commits:
     - subject: "Unpin nodejs and npm to fix ERROR: unable to select packages"
       hash: d3d2456a3a2d6d889e55eb832d11dcf75b841cf6
       body: ""
