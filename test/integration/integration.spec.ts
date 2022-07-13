@@ -1,8 +1,8 @@
-import TransformerRuntime from '../../lib';
-import * as yaml from 'js-yaml';
+import type { Contract } from '@balena/jellyfish-types/build/core';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Contract } from '@balena/jellyfish-types/build/core';
+import * as yaml from 'js-yaml';
+import TransformerRuntime from '../../lib';
 import testTransformer from './test-transformer';
 
 const runtime = new TransformerRuntime(`-----BEGIN RSA PRIVATE KEY-----

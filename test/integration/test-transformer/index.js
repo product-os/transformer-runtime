@@ -5,8 +5,8 @@
  */
 
 const fs = require('fs/promises')
-const logger = require('./logger')
 const path = require('path')
+const logger = require('./logger')
 
 const getEnvOrFail = (envVar) => {
 	const env = process.env[envVar]

@@ -1,18 +1,18 @@
-import {
+import type { Contract } from '@balena/jellyfish-types/build/core';
+import Logger from 'bunyan';
+import { randomUUID } from 'crypto';
+import debugnyan from 'debugnyan';
+import Dockerode from 'dockerode';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as stream from 'stream';
+import type {
 	ErrorContract,
 	InputManifest,
 	OutputManifest,
 	TransformerContract,
 } from './types';
-import * as fs from 'fs';
 import { createDecryptor } from './secrets';
-import * as path from 'path';
-import Dockerode = require('dockerode');
-import { Contract } from '@balena/jellyfish-types/build/core';
-import * as stream from 'stream';
-import { randomUUID } from 'crypto';
-import debugnyan from 'debugnyan';
-import Logger from 'bunyan';
 
 const defaultLogger = debugnyan('transformer-runtime', {});
 

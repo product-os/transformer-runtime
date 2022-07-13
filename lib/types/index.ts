@@ -1,8 +1,9 @@
-import {
-	ContractData,
+import type {
 	Contract,
+	ContractData,
 	ContractDefinition,
 } from '@balena/jellyfish-types/build/core';
+
 interface TaskData extends ContractData {
 	actor: string;
 	input: ArtifactContract;
